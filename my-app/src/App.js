@@ -5,12 +5,9 @@ import "./css/index.css";
 import "./css/fonts.css";
 
 class App extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
+    state = {  
       currentPage: 'home',
     };
-  }
 
   switchPage = (page) => {
     this.setState({currentPage: page });

@@ -3,9 +3,7 @@ import CardSection from "../cardSection/cardSection";
 import AsidePanel from "../AsidePanel/asidePanel";
 
 class Container extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
+    state = {
         filterOptions: {
             categories: [
                 'Tops & T-Shirts',
@@ -22,9 +20,8 @@ class Container extends React.Component {
             ],
             sizes: ['XS', 'S', 'M', 'L', 'XL'],
             dressStyles: ['All Styles', 'Classic', 'Casual', 'Formal', 'Sport'],
-            },
-        };
-    }
+        },
+    };
 
     render () {
          const { filterOptions } = this.state;
