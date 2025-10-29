@@ -1,0 +1,56 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Black Graphic T-Shirt",
+      "brand": "Jewel's Brand",
+      "category": "Printed T-Shirts",
+      "price": 35,
+      "rating": 4.5,
+      "image": "/images/catalog/card1.png",
+      "description": "Stylish black T-shirt with graphic print.",
+      "colors": ["black"],
+      "sizes": ["M", "L", "XL"],
+      "style": "Casual"
+    },
+    {
+      "id": 2,
+      "name": "White Plain Kurti",
+      "brand": "Flora's Brand",
+      "category": "Kurti",
+      "price": 80,
+      "rating": 5,
+      "image": "/images/catalog/card2.png",
+      "description": "Elegant white kurti for daily wear.",
+      "colors": ["white", "yellow", "pink"],
+      "sizes": ["XS", "S"],
+      "style": "Elegant"
+    },
+    {
+      "id": 3,
+      "name": "Navy Joggers",
+      "brand": "Sporty Brand",
+      "category": "Joggers",
+      "price": 60,
+      "rating": 4,
+      "image": "/images/catalog/card3.png",
+      "description": "Comfortable navy joggers for active lifestyle.",
+      "colors": ["navy", "black", "grey"],
+      "sizes": ["M", "L", "XL"],
+      "style": "Sport"
+    },
+    {
+      "id": 4,
+      "name": "Red Full Sleeve T-Shirt",
+      "brand": "CozyFit",
+      "category": "Full Sleeve T-Shirts",
+      "price": 45,
+      "rating": 3.5,
+      "image": "/images/catalog/card4.png",
+      "description": "Warm red full sleeve T-shirt.",
+      "colors": ["red", "black"],
+      "sizes": ["S", "M", "L"],
+      "style": "Casual"
+    }
+  ]
+}
