@@ -145,9 +145,6 @@ function Container() {
         if (value === 'name-desc') {
             sorted.sort((a, b) => b.name.localeCompare(a.name));
         }
-        if (value === 'rating-desc') {
-            sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-        }
         setFilteredCardInfo(sorted);
     };
 

@@ -3,7 +3,7 @@ import Footer from '../../components/Footer/Footer.js';
 import Container from '../../components/Container/container';
 import "./catalog.css"
 
-function Catalog({ cart, addToCart, removeFromCart }) {
+function Catalog() {
     return(
         <div>
             <Header/>
