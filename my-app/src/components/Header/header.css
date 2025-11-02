@@ -28,9 +28,6 @@ header {
     max-height: 2.8125rem;
 }
 
-:root.dark-theme .logo img {
-    content: url("../../images/Logo-dark.png"); 
-}
 
 .main-nav {
     display: flex;
