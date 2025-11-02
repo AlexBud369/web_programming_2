@@ -1,13 +1,8 @@
 import { useState, useEffect } from 'react';
-import firstSlide from "../../images/home_page_person1.jpg";
-import secondSlide from "../../images/home_page_person2.jpg"; 
-import prevButton from "../../images/carousel-control-prev.svg";
-import nextButton from "../../images/carousel-control-next.svg";
-
 
 const slides = [
-  { id: 1, image: firstSlide, title: "Summer Sale!" },
-  { id: 2, image: secondSlide, title: "New Collection" },
+  { id: 1, image: "/images/spec/home_page_person1.jpg", title: "Summer Sale!" },
+  { id: 2, image: "/images/spec/home_page_person2.jpg", title: "New Collection" },
 ];
 
 function Slider() {
@@ -30,7 +25,7 @@ function Slider() {
       <section className="hero">
         <div className="hero-slider">
           <button className="slider-arrow slider-prev" onClick={prevSlide}>
-            <img src={prevButton} alt="Previous" />
+            <img src="images/spec/carousel-control-prev.svg" alt="Previous" />
           </button>
 
           <div className="slider-container">
@@ -39,7 +34,7 @@ function Slider() {
           </div>
 
           <button className="slider-arrow slider-next" onClick={nextSlide}>
-            <img src={nextButton} alt="Next" />
+            <img src="images/spec/carousel-control-next.svg" alt="Next" />
           </button>
 
           <div className="slider-dots">
