@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Typography } from "@mui/material";
 import CardSection from "../CardSection/cardSection.js";
 import AsidePanel from "../AsidePanel/asidePanel.js";
-import Modal from "../Modal/modal";
+import UniversalModal from "../Modal/Modal.js";
 
 function Container() {
     const [filterOptions] = useState({
@@ -188,11 +189,19 @@ function Container() {
                 />
             )}
 
-            {isModalOpen && (
-                <Modal
-                    item={selectedItem}
+           {isModalOpen && (
+                <UniversalModal
+                    open={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
-                />
+                    title={selectedItem.name}
+                    image={selectedItem.image}
+                    content={
+                    <>
+                        <Typography><strong>Brand:</strong> {selectedItem.brand}</Typography>
+                        <Typography><strong>Price:</strong> ${selectedItem.price}</Typography>
+                    </>
+                    }
+            />
             )}
         </main>
     );
