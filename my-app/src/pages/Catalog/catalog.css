@@ -577,3 +577,10 @@ body, html {
     color: #999;
     font-style: italic;
 }
+
+.product-card-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
