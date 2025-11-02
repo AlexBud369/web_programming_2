@@ -14,6 +14,7 @@ function Header() {
                     <ul>
                         <li className="auth-only"><Link to="/home">Home</Link></li>
                         <li className="auth-only"> <Link to="/catalog">Catalog</Link></li>
+                        <li className="auth-only"> <Link to="/cart">Cart</Link></li>
                     </ul>
                 </nav>
                 <div className="header-controls">

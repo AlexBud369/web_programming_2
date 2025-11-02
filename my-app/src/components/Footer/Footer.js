@@ -1,8 +1,8 @@
 import {Link} from "react-router-dom";
 import './footer.css';
-import facebookIcon from "../../images/facebook_icon.svg";
-import instagramIcon from "../../images/instagram_icon.svg";
-import twitterIcon from "../../images/twitter_icon.svg";
+//import facebookIcon from "/images/spec/facebook_icon.svg";
+//import instagramIcon from "/images/spec/instagram_icon.svg";
+//import twitterIcon from "/images/spec/twitter_icon.svg";
 
 function Footer() {
     return (
@@ -13,6 +13,7 @@ function Footer() {
                     <ul className="footer__list">
                         <li><Link to="/home" className="footer__link">Home</Link></li>
                         <li><Link to="/catalog" className="footer__link">Catalog</Link></li>
+                        <li> <Link to="/cart">Cart</Link></li>
                     </ul>
                 </div>
                 <div className="footer__column">
@@ -44,13 +45,13 @@ function Footer() {
                 <div className="footer__bottom">
                 <div className="footer__social" aria-label="Social media links">
                     <a href="#">
-                        <img src={facebookIcon} alt="" className="footer__icon" width="24" height="24"></img>
+                        <img src="/images/spec/facebook_icon.svg" alt="" className="footer__icon" width="24" height="24"></img>
                     </a>
                     <a href="#">
-                        <img src={instagramIcon} alt="" className="footer__icon" width="24" height="24"></img>
+                        <img src="/images/spec/instagram_icon.svg" alt="" className="footer__icon" width="24" height="24"></img>
                     </a>
                     <a href="#">
-                        <img src={twitterIcon} alt="" className="footer__icon" width="24" height="24"></img>
+                        <img src="/images/spec/twitter_icon.svg" alt="" className="footer__icon" width="24" height="24"></img>
                     </a>
                 </div>
                 <p className="footer__copyright">Copyright © 2023 Euphoria Folks Pvt Ltd. All rights reserved.</p>
