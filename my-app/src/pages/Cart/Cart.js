@@ -4,7 +4,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import CartContainer from '../../components/CartContainer/CartContainer';
 import CheckoutForm from '../../components/CheckoutForm/CheckoutForm';
-import UniversalModal from "../../components/Modal/Modal.js";
+import UniversalModal from "../../components/Modal/modal.js";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);

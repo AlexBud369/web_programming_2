@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 import CardSection from "../CardSection/cardSection.js";
 import AsidePanel from "../AsidePanel/asidePanel.js";
-import UniversalModal from "../Modal/Modal.js";
+import UniversalModal from "../Modal/modal.js";
 
 function Container() {
     const [filterOptions] = useState({
@@ -12,7 +12,7 @@ function Container() {
             { name: 'black', hex: 'black' },
             { name: 'white', hex: 'white' },
             { name: 'red', hex: 'red' },
-        ],
+        ], 
         sizes: ['XS', 'S', 'M', 'L', 'XL'],
         dressStyles: ['All Styles', 'Classic', 'Casual', 'Formal', 'Sport'],
     });
