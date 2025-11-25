@@ -2,7 +2,7 @@ import { Paper, Typography, Box, Alert } from '@mui/material';
 import CartItem from '../CartItem/CartItem';
 import ActionButton from '../ActionButton/ActionButton';
 
-function CartContainer({ cart, onUpdateQuantity, onRemove, onCheckout }) {
+function CartContainer({ cart, onUpdateQuantity, onRemove }) {
     const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
 
     if (cart.length === 0) {
@@ -34,16 +34,6 @@ function CartContainer({ cart, onUpdateQuantity, onRemove, onCheckout }) {
                 Total: ${total}
             </Typography>
           </Box>
-
-          <ActionButton
-              onClick={onCheckout}
-              fullWidth
-              size="large"
-              color="success"
-              sx={{ borderRadius: 2 }}
-          >
-            Place Order
-          </ActionButton>
       </Paper>
     );
 }

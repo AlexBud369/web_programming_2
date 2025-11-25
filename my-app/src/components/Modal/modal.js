@@ -6,9 +6,7 @@ function UniversalModal({
   onClose, 
   title, 
   image, 
-  content, 
-  actionText, 
-  onAction 
+  content
 }) {
     return (
       <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
@@ -45,11 +43,6 @@ function UniversalModal({
             <ActionButton onClick={onClose} variant="outlined">
               Close
             </ActionButton>
-            {actionText && (
-              <ActionButton onClick={onAction} color="success">
-                {actionText}
-              </ActionButton>
-            )}
           </DialogActions>
       </Dialog>
     );

@@ -10,31 +10,31 @@ import {
 } from "@mui/material";
 
 function AsidePanel({ 
-  filterOptions, 
-  onCategoryChange, 
-  onSortChange, 
-  onColorChange, 
-  onSizeChange, 
-  onStyleChange, 
-  onPriceChange, 
-  onSearchChange, 
-  onClearFilters 
-}) {
-  const { categories, colors, sizes, dressStyles } = filterOptions || {};
-  const [minPrice, setMinPrice] = useState(20);
-  const [maxPrice, setMaxPrice] = useState(250);
-  const [searchQuery, setSearchQuery] = useState("");
+    filterOptions, 
+    onCategoryChange, 
+    onSortChange, 
+    onColorChange, 
+    onSizeChange, 
+    onStyleChange, 
+    onPriceChange, 
+    onSearchChange, 
+    onClearFilters 
+    }) {
+    const { categories, colors, sizes, dressStyles } = filterOptions || {};
+    const [minPrice, setMinPrice] = useState(20);
+    const [maxPrice, setMaxPrice] = useState(250);
+    const [searchQuery, setSearchQuery] = useState("");
 
-  const handlePriceChange = (event, newValue) => {
-    setMinPrice(newValue[0]);
-    setMaxPrice(newValue[1]);
-    onPriceChange(newValue[0], newValue[1]);
-  };
+    const handlePriceChange = (event, newValue) => {
+        setMinPrice(newValue[0]);
+        setMaxPrice(newValue[1]);
+        onPriceChange(newValue[0], newValue[1]);
+    };
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    onSearchChange(e.target.value);
-  };
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+        onSearchChange(e.target.value);
+    };
 
     return (
         <Box sx={{ width: 250, p: 2, bgcolor: 'background.paper', borderRadius: 2, boxShadow: 1 }}>

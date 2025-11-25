@@ -13,7 +13,7 @@ function Footer() {
                     <ul className="footer__list">
                         <li><Link to="/home" className="footer__link">Home</Link></li>
                         <li><Link to="/catalog" className="footer__link">Catalog</Link></li>
-                        <li> <Link to="/cart">Cart</Link></li>
+                        <li><Link to="/cart"  className="footer__link">Cart</Link></li>
                     </ul>
                 </div>
                 <div className="footer__column">
