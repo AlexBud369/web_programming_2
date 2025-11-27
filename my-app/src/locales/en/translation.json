@@ -1,0 +1,86 @@
+{
+  "header": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "cart": "Cart",
+    "admin": "Admin"
+  },
+  "footer": {
+    "shop": "Shop",
+    "contacts": "Contacts",
+    "newsletter": "Newsletter",
+    "subscribe": "Subscribe for exclusive offers and updates",
+    "placeholder": "Your email address",
+    "button": "Subscribe",
+    "disclaimer": "We respect your privacy. Unsubscribe at any time.",
+    "copyright": "Copyright © 2023 Euphoria Folks Pvt Ltd. All rights reserved."
+  },
+  "slider": {
+    "summer_sale": "Summer Sale!",
+    "new_collection": "New Collection"
+  },
+  "catalog": {
+    "quick_view": "Quick View",
+    "add_to_cart": "Add to Cart",
+    "added_to_cart": "Added to cart!",
+    "filters": "Filter & Sort",
+    "clear": "Clear all",
+    "sort": "Sort By",
+    "default": "Default",
+    "price_asc": "Price: Low to High",
+    "price_desc": "Price: High to Low",
+    "name_asc": "Name: A to Z",
+    "name_desc": "Name: Z to A",
+    "search": "Search",
+    "search_placeholder": "Name, description...",
+    "category": "Category",
+    "price": "Price",
+    "colors": "Colors",
+    "size": "Size",
+    "style": "Dress Style",
+    "all_styles": "All Styles"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "your_cart": "Your Cart",
+    "items": "items",
+    "empty": "Your cart is empty",
+    "total": "Total",
+    "checkout": "Checkout Information",
+    "confirm_order": "Confirm Order",
+    "success_title": "Order Confirmed!",
+    "thank_you": "Thank you, {{name}}!",
+    "contact_message": "We will contact you at {{email}}",
+    "full_name": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
+    "pickup": "Pickup Point"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "total": "Total Products",
+    "no_products": "No products yet",
+    "add_product": "Add Product",
+    "edit_product": "Edit Product",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm_delete": "Are you sure you want to delete this product?",
+    "form": {
+      "name": "Product Name",
+      "brand": "Brand",
+      "price": "Price ($)",
+      "image_url": "Image URL",
+      "category": "Category",
+      "colors": "Colors (comma-separated)",
+      "colors_hint": "e.g. black, white, red",
+      "sizes": "Sizes (comma-separated)",
+      "sizes_hint": "e.g. S, M, L, XL",
+      "style": "Style"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel"
+  }
+}
