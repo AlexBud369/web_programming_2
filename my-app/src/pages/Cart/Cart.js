@@ -1,88 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { Container, Typography } from '@mui/material';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import CartContainer from '../../components/CartContainer/CartContainer';
 import CheckoutForm from '../../components/CheckoutForm/CheckoutForm';
 import UniversalModal from "../../components/Modal/modal.js";
+import { clearCart } from '../../Store/Slices/cartSlice.js';
 
 const Cart = () => {
-    const [cart, setCart] = useState([]);
-    const [openSuccess, setOpenSuccess] = useState(false);
-    const [formData, setFormData] = useState({
-      name: '',
-      email: '',
-      phone: '',
-      pickup: ''
-    });
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart.items);
 
-    useEffect(() => {
-      const saved = localStorage.getItem('cart');
-      if (saved) {
-        setCart(JSON.parse(saved));
-      }
-    }, []);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    pickup: ''
+  });
 
-    const saveCart = (newCart) => {
-      setCart(newCart);
-      localStorage.setItem('cart', JSON.stringify(newCart));
-    };
+  const handleCheckout = (e) => {
+    e.preventDefault();
+    if (formData.name && formData.email && formData.pickup) {
+      dispatch(clearCart()); 
+      setOpenSuccess(true);
+      setFormData({ name: '', email: '', phone: '', pickup: '' });
+    }
+  };
 
-    const updateQuantity = (id, newQuantity) => {
-      if (newQuantity <= 0) {
-        removeFromCart(id);
-      } else {
-        saveCart(cart.map(item => item.id === id ? { ...item, quantity: newQuantity } : item));
-      }
-    };
+  return (
+    <>
+      <Header />
+      <Container maxWidth="lg" sx={{ py: 6 }}>
+        <Typography variant="h4" gutterBottom align="center" fontWeight="bold">
+          {t('cart.title')}
+        </Typography>
 
-    const removeFromCart = (id) => {
-      saveCart(cart.filter(item => item.id !== id));
-    };
+        <CartContainer />
 
-    const handleCheckout = (e) => {
-      e.preventDefault();
-      if (formData.name && formData.email && formData.pickup) {
-        saveCart([]);
-        setOpenSuccess(true);
-      }
-    };
-
-    return (
-      <>
-        <Header />
-        <Container maxWidth="lg" sx={{ py: 4 }}>
-          <CartContainer
-            cart={cart}
-            onUpdateQuantity={updateQuantity}
-            onRemove={removeFromCart}
+        {cart.length > 0 && (
+          <CheckoutForm
+            formData={formData}
+            setFormData={setFormData}
+            onSubmit={handleCheckout}
           />
+        )}
+      </Container>
+      <Footer />
 
-          {cart.length > 0 && (
-            <CheckoutForm
-              formData={formData}
-              setFormData={setFormData}
-              onSubmit={handleCheckout}
-            />
-          )}
-        </Container>
-        <Footer />
-
-        <UniversalModal
-          open={openSuccess}
-          onClose={() => setOpenSuccess(false)}
-          title="Order Confirmed!"
-          content={
-              <>
-              <Typography variant="h6">Thank you, {formData.name}!</Typography>
-              <Typography variant="body2" color="text.secondary">
-                  We will contact you at {formData.email}
-              </Typography>
-              </>
-          }
-          />
-      </>
-    );
+      <UniversalModal
+        open={openSuccess}
+        onClose={() => setOpenSuccess(false)}
+        title={t('cart.success_title')}
+        content={
+          <>
+            <Typography variant="h6">{t('cart.thank_you', { name: formData.name })}</Typography>
+            <Typography variant="body1" sx={{ mt: 1 }}>
+              {t('cart.contact_message', { email: formData.email })}
+            </Typography>
+          </>
+        }
+      />
+    </>
+  );
 };
 
 export default Cart;
