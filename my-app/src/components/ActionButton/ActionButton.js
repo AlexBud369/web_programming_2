@@ -7,10 +7,12 @@ function ActionButton({
     color = "primary", 
     size = "medium",
     fullWidth = false,
+    type="button",
     ...props 
     }) {
     return (
         <MuiButton
+            type={type}
             variant={variant}
             color={color}
             size={size}

@@ -40,7 +40,7 @@ function UniversalModal({
           </DialogContent>
 
           <DialogActions sx={{ justifyContent: 'center', pb: 2, gap: 2 }}>
-            <ActionButton onClick={onClose} variant="outlined">
+            <ActionButton type="button" onClick={onClose} variant="outlined">
               Close
             </ActionButton>
           </DialogActions>
