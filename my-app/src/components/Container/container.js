@@ -10,7 +10,7 @@ function Container() {
         colors: [
             { name: 'purple', hex: 'purple' },
             { name: 'black', hex: 'black' },
-            { name: 'white', hex: 'white' },
+            { name: 'white', hex: 'black' },
             { name: 'red', hex: 'red' },
         ], 
         sizes: ['XS', 'S', 'M', 'L', 'XL'],
