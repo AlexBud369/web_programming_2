@@ -1,10 +1,19 @@
 const BaseController = require('./baseController');
-const { Destination, Activity } = require('../models');
+const { Destination, Activity } = require('../models/associations'); 
 
 class DestinationController extends BaseController {
   constructor() {
     super(Destination);
     this.searchFields = ['name', 'location', 'notes'];
+     this.fieldMapping = {
+        'createdAt': 'createdAt',
+        'updatedAt': 'updatedAt',
+        'created_at': 'createdAt',
+        'updated_at': 'updatedAt',
+        'startDate': 'start_date',
+        'endDate': 'end_date',
+        'total_budget': 'total_budget'
+    };
   }
 
   getById = async (req, res) => {

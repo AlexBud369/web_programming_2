@@ -1,5 +1,5 @@
 const BaseController = require('./baseController');
-const { User } = require('../models');
+const { User } = require('../models/associations');
 
 class UserController extends BaseController {
   constructor() {

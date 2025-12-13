@@ -4,15 +4,26 @@ class BaseController {
     constructor(model) {
         this.model = model;
         this.searchFields = this.model.searchFields || ['title', 'name', 'description'];
+        this.fieldMapping = {
+            'createdAt': 'created_at',
+            'updatedAt': 'updated_at',
+            'startDate': 'start_date',
+            'endDate': 'end_date',
+            'passwordHash': 'password_hash'
+        };
     }
 
     getAll = async (req, res) => {
         try {
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 10;
-            const sortBy = req.query.sortBy || 'createdAt';
+            let sortBy = req.query.sortBy || 'created_at'; 
             const sortOrder = req.query.sortOrder || 'ASC';
             const search = req.query.search || '';
+
+            if (this.fieldMapping[sortBy]) {
+                sortBy = this.fieldMapping[sortBy];
+            }
 
             const offset = (page - 1) * limit;
             const where = {};
@@ -20,17 +31,18 @@ class BaseController {
             const filterFields = ['page', 'limit', 'sortBy', 'sortOrder', 'search'];
             Object.keys(req.query).forEach(key => {
                 if (!filterFields.includes(key) && req.query[key] !== '') {
-                    where[key] = req.query[key];
+                    const fieldName = this.fieldMapping[key] || key;
+                    where[fieldName] = req.query[key];
                 }
             });
 
             if (search) {
                 const searchConditions = this.searchFields.map(field => ({
-                    [field]: { [Op.iLike]: `%${search}%` } 
+                    [field]: { [Op.iLike]: `%${search}%` }
                 }));
                 where[Op.and] = [
-                ...(where[Op.and] || []),
-                { [Op.or]: searchConditions }
+                    ...(where[Op.and] || []),
+                    { [Op.or]: searchConditions }
                 ];
             }
 
@@ -45,16 +57,20 @@ class BaseController {
                 success: true,
                 data: rows,
                 pagination: {
-                totalItems: count,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page,
-                itemsPerPage: limit
+                    totalItems: count,
+                    totalPages: Math.ceil(count / limit),
+                    currentPage: page,
+                    itemsPerPage: limit
                 }
             });
 
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ success: false, error: 'Ошибка при получении данных' });
+            console.error('Ошибка в getAll:', error.message);
+            res.status(500).json({ 
+                success: false, 
+                error: 'Ошибка при получении данных',
+                details: error.message 
+            });
         }
     };
 
