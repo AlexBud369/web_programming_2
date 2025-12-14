@@ -40,6 +40,12 @@ const Activity = sequelize.define('Activity', {
             model: 'destinations',
             key: 'id'
         }
+    },
+    image_url: {
+        type: DataTypes.STRING,
+        validate: {
+            isUrl: true
+        }
     }
 }, {
   tableName: 'activities',

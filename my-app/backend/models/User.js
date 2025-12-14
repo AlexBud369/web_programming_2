@@ -31,7 +31,13 @@ const User = sequelize.define('User', {
     role: {
         type: DataTypes.ENUM('traveler', 'admin'),
         defaultValue: 'traveler'
-    }
+    },
+    avatar_url: {
+        type: DataTypes.STRING,
+        validate: {
+            isUrl: true
+        }
+    },
     }, {
         tableName: 'users',
         timestamps: true,

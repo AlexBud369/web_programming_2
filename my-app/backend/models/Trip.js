@@ -55,6 +55,12 @@ const Trip = sequelize.define('Trip', {
             model: 'users',
             key: 'id'
         }
+    },
+    image_url: {
+        type: DataTypes.STRING,
+        validate: {
+            isUrl: true
+        }
     }
 }, {
   tableName: 'trips',
