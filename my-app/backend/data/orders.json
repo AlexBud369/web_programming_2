@@ -1,0 +1,24 @@
+{
+  "orders": [
+    {
+      "id": 1001,
+      "productId": 1,
+      "customerName": "Иван Иванов",
+      "size": "M",
+      "quantity": 2,
+      "totalPrice": 1998,
+      "status": "в обработке",
+      "date": "2024-01-15"
+    },
+    {
+      "id": 1002,
+      "productId": 3,
+      "customerName": "Мария Петрова",
+      "size": "S",
+      "quantity": 1,
+      "totalPrice": 2499,
+      "status": "доставляется",
+      "date": "2024-01-16"
+    }
+  ]
+}
