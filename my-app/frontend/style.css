@@ -18,7 +18,7 @@ header {
   text-align: center;
   margin-bottom: 30px;
   padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0931e4 0%, #764ba2 100%);
   color: white;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -30,10 +30,10 @@ h1 {
 }
 
 h2 {
-  color: #667eea;
+  color: #0932e4;
   margin-bottom: 20px;
   padding-bottom: 10px;
-  border-bottom: 2px solid #667eea;
+  border-bottom: 2px solid #0931e4;
 }
 
 .container {
@@ -133,7 +133,7 @@ h2 {
 
 button {
   padding: 10px 20px;
-  background: #667eea;
+  background: #0931e4;
   color: white;
   border: none;
   border-radius: 5px;

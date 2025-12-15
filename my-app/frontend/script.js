@@ -4,14 +4,16 @@ let ordersData = [];
 
 async function loadProducts() {
     try {
-        console.log('Загрузка товаров...');
         const response = await fetch(`${API_URL}/products`);
-        if (!response.ok) throw new Error('Ошибка сети');
+        if (!response.ok) {
+            throw new Error('Ошибка сети');
+        }
         
         productsData = await response.json();
         displayProducts(productsData);
         populateProductSelect(productsData);
         console.log('Товары загружены:', productsData.length);
+
         return productsData;
     } catch (error) {
         showMessage('Ошибка при загрузке товаров', 'error');
@@ -21,6 +23,7 @@ async function loadProducts() {
 
 function displayProducts(products) {
     const container = document.getElementById('products-container');
+    
     if (!container) {
         console.error('Элемент products-container не найден');
         return;

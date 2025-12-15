@@ -33,11 +33,11 @@ async function writeJsonFile(filePath, data) {
   }
 }
 
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-app.get('/api/products', async (req, res) => {
+app.get('/api/products', async (_req, res) => {
   try {
     const data = await readJsonFile(PRODUCTS_PATH);
     res.json(data.products);
@@ -46,7 +46,7 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-app.get('/api/orders', async (req, res) => {
+app.get('/api/orders', async (_req, res) => {
   try {
     const data = await readJsonFile(ORDERS_PATH);
     res.json(data.orders);
