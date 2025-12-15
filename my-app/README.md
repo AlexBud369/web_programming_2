@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+### Реализация бэкенд-сервисов
+1. GET-сервис, возвращающий веб-страницу с фронтенд-кодом
+Маршрут: /
+Описание: Отдает HTML-страницу (index.html) с фронтенд-интерфейсом для каталога товаров, формы заказа и списка заказов (аналогично странице голосования с блоками для голосования и статистики, или странице бронирования с формой и списком бронирований).
+Функции фронтенда: Отображение карточек товаров, формы для оформления заказа, таблицы заказов, кнопок обновления и скачивания.
+2. GET-сервис, возвращающий данные в формате JSON
+Маршрут: /api/products
+Описание: Возвращает JSON со списком доступных товаров (аналогично возврату вариантов для голосования или списка доступных столиков).
+Пример JSON:
+JSON[
+  { "id": 1, "name": "Футболка", "category": "Верхняя одежда", "color": "Синий", "price": 1000, "size": ["S", "M"], "stock": 10 },
+  { "id": 2, "name": "Джинсы", "category": "Нижняя одежда", "color": "Черный", "price": 2000, "size": ["30", "32"], "stock": 5 }
+]
+3. POST-сервис, возвращающий данные в формате JSON
+Маршрут: /api/orders (POST возвращает созданный заказ)
+Описание: Возвращает обновленный JSON с данными о заказе после создания (аналогично возврату статистики голосования или обновленного списка бронирований).
+4. POST-сервис, принимающий данные
+Маршрут: /api/orders
+Описание: Принимает данные заказа (productId, customerName, size, quantity), обновляет stock в товарах, добавляет заказ в orders.json и возвращает подтверждение (аналогично приему голоса с обновлением статистики или приему деталей бронирования с изменениями в списке).
+Обработка ошибок: Если недостаточно на складе или поля не заполнены — возвращает ошибку (аналогично исключению при незаполненном голосе или бронировании занятого столика/прошедшей даты).
+5. DELETE-сервис для отмены или удаления данных
+Маршрут: /api/orders/:id
+Описание: Удаляет заказ по ID, возвращает stock в товары и обновляет orders.json (аналогично отмене последнего голосования или отмене бронирования).
+6. Сервис для получения данных в формате XML/HTML/JSON в зависимости от заголовка Accept
+Маршрут: /api/data/:type (где type = products или orders)
+Описание: Возвращает данные о товарах или заказах в выбранном формате (аналогично получению статистики в файлах трех форматов или забронированных столиков).
+Примеры заголовков Accept:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+application/json → JSON
+application/xml → XML
+text/html → HTML (таблица)
 
-## Available Scripts
+7. Хранение данных
+Исходные данные хранятся в JSON-файлах (products.json и orders.json). Приложение продолжает работу при изменении файлов (каждый запрос читает файлы заново, аналогично примерам).
+8. Обработка исключительных ситуаций
 
-In the project directory, you can run:
+Оформление заказа без заполнения полей или с недостаточным stock.
+Удаление несуществующего заказа.
+Ошибки чтения/записи файлов (возврат ошибок 500 или пустых массивов).
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Реализация фронтенда
+1. Получение данных с бэкенда
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+GET /api/products → Загружает товары для каталога.
+GET /api/orders → Загружает заказы для таблицы.
+POST /api/orders → Отправляет данные заказа.
 
-### `npm test`
+2. Отображение данных
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Каталог товаров в карточках (название, категория, цвет, цена, размеры, stock).
+Форма заказа с выпадающими списками (товар, размер) и контролем количества.
+Таблица заказов (ID, клиент, товар, размер, количество, сумма, статус, дата, кнопка удаления).
+(Аналогично отображению в кнопках/списках/радиокнопках для голосования или календаре/списках для бронирования).
 
-### `npm run build`
+3. Изменение данных по событиям
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+При оформлении заказа: Отправляется POST /api/orders, затем обновляются товары и заказы (loadProducts() и loadOrders()).
+При удалении: Отправляется DELETE /api/orders/:id, затем обновляются данные.
+Кнопки "Обновить товары" и "Обновить заказы": Вызывают loadProducts() и loadOrders() для ручного обновления (аналогично обновлению статистики после голоса или списка после бронирования).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+4. Скачивание данных
+Кнопки JSON/XML/HTML для товаров и заказов: Отправляют GET /api/data/:type с Accept и скачивают файл (аналогично кнопкам для результатов голосования или статистики бронирований).
+Логика работы
+GET / отдает index.html. Товары из products.json загружаются по GET /api/products и отображаются в карточках. Заказы из orders.json — по GET /api/orders в таблице. При заказе статистика (stock и заказы) обновляется мгновенно. Радиокнопки/списки очищаются после действия. Обработка исключений: Сообщения об ошибках при незаполненных полях или недостатке stock. Кнопки скачивания позволяют получить данные в файлах.
