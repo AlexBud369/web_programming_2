@@ -19,6 +19,26 @@
       "totalPrice": 2499,
       "status": "доставляется",
       "date": "2024-01-16"
+    },
+    {
+      "id": 1003,
+      "productId": 1,
+      "customerName": "gb",
+      "size": "M",
+      "quantity": 4,
+      "totalPrice": 3996,
+      "status": "в обработке",
+      "date": "2025-12-15"
+    },
+    {
+      "id": 1004,
+      "productId": 2,
+      "customerName": "fghf",
+      "size": "XL",
+      "quantity": 4,
+      "totalPrice": 11996,
+      "status": "в обработке",
+      "date": "2025-12-15"
     }
   ]
 }

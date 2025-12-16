@@ -2,24 +2,29 @@ const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
 const cors = require('cors');
-const XmlConverter = require('./utils/xmlConverter');
+const { Builder } = require('xml2js'); 
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 const PRODUCTS_PATH = path.join(__dirname, 'data', 'products.json');
 const ORDERS_PATH = path.join(__dirname, 'data', 'orders.json');
+
+const xmlBuilder = new Builder({
+  xmldec: { version: '1.0', encoding: 'UTF-8' },
+  renderOpts: { pretty: true, indent: '  ', newline: '\n' }
+});
 
 async function readJsonFile(filePath) {
   try {
     const data = await fs.readFile(filePath, 'utf8');
     return JSON.parse(data);
   } catch (error) {
-    console.error(`Error reading file ${filePath}:`, error);
+    console.error(`Ошибка чтения файла ${filePath}:`, error);
     return { products: [] };
   }
 }
@@ -28,13 +33,13 @@ async function writeJsonFile(filePath, data) {
   try {
     await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf8');
   } catch (error) {
-    console.error(`Error writing file ${filePath}:`, error);
+    console.error(`Ошибка записи файла ${filePath}:`, error);
     throw error;
   }
 }
 
 app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.get('/api/products', async (_req, res) => {
@@ -150,10 +155,32 @@ app.get('/api/data/:type', async (req, res) => {
     }
     
     if (accept.includes('application/xml')) {
-      const xml = type === 'products' 
-        ? XmlConverter.productsToXml(data)
-        : XmlConverter.ordersToXml(data);
+      const xmlData = {};
       
+      if (type === 'products') {
+        xmlData.products = { product: data.map(p => ({
+          id: p.id,
+          name: p.name,
+          category: p.category,
+          price: p.price,
+          sizes: { size: p.size },
+          color: p.color,
+          stock: p.stock
+        }))};
+      } else {
+        xmlData.orders = { order: data.map(o => ({
+          id: o.id,
+          productId: o.productId,
+          customerName: o.customerName,
+          size: o.size,
+          quantity: o.quantity,
+          totalPrice: o.totalPrice,
+          status: o.status,
+          date: o.date
+        }))};
+      }
+      
+      const xml = xmlBuilder.buildObject(xmlData);
       res.setHeader('Content-Type', 'application/xml');
       return res.send(xml);
     } 
@@ -164,47 +191,22 @@ app.get('/api/data/:type', async (req, res) => {
         <head>
           <title>${type === 'products' ? 'Товары' : 'Заказы'}</title>
           <style>
-            body { font-family: Arial; margin: 20px; }
-            table { border-collapse: collapse; width: 100%; }
-            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-            th { background-color: #f2f2f2; }
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+            th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+            th { background-color: #f5f5f5; }
           </style>
         </head>
         <body>
           <h1>${type === 'products' ? 'Список товаров' : 'Список заказов'}</h1>
           <table>
-            <thead>
-              <tr>
       `;
       
       if (type === 'products') {
-        html += `
-          <th>ID</th>
-          <th>Название</th>
-          <th>Категория</th>
-          <th>Цена</th>
-          <th>Размеры</th>
-          <th>Цвет</th>
-          <th>Остаток</th>
-        `;
+        html += '<tr><th>ID</th><th>Название</th><th>Категория</th><th>Цена</th><th>Размеры</th><th>Цвет</th><th>Остаток</th></tr>';
       } else {
-        html += `
-          <th>ID</th>
-          <th>Клиент</th>
-          <th>ID товара</th>
-          <th>Размер</th>
-          <th>Количество</th>
-          <th>Сумма</th>
-          <th>Статус</th>
-          <th>Дата</th>
-        `;
+        html += '<tr><th>ID</th><th>Клиент</th><th>ID товара</th><th>Размер</th><th>Количество</th><th>Сумма</th><th>Статус</th><th>Дата</th></tr>';
       }
-      
-      html += `
-            </tr>
-          </thead>
-          <tbody>
-      `;
       
       data.forEach(item => {
         html += '<tr>';
@@ -234,7 +236,6 @@ app.get('/api/data/:type', async (req, res) => {
       });
       
       html += `
-            </tbody>
           </table>
         </body>
         </html>
