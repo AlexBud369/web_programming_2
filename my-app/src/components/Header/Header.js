@@ -1,48 +1,86 @@
-import {Link} from 'react-router-dom';
-import "./header.css";
-import logoImage from "../../images/Logo.png";
+// components/Header/Header.js
+import { Link, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+import logoImage from '../../images/Logo.png';
+import { media } from '../../styles/media';
 
+const StyledHeader = styled.header`
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.text};
+  height: 72px;
+  box-shadow: ${({ theme }) => theme.shadows.md};
+  position: relative;
+  z-index: 100;
+`;
 
-function Header() {
-    return (
-        <header className="header">
-            <div className="header-container">
-                <a href="index.html" className="logo">
-                    <img src={logoImage} alt="Euphoria Logo"></img>
-                </a>
-                <nav className="main-nav">
-                    <ul>
-                        <li className="auth-only"><Link to="/home">Home</Link></li>
-                        <li className="auth-only"> <Link to="/catalog">Catalog</Link></li>
-                    </ul>
-                </nav>
-                <div className="header-controls">
-                    <div className="language-selector">
-                        <button className="language-toggle">
-                            <span className="current-language">English</span>
-                            <span className="drop-icon">▼</span>
-                        </button>
-                        <div className="language-dropdown">
-                            <button data-lang="en">English</button>
-                            <button data-lang="ru">Русский</button>
-                        </div>
-                    </div>
-                    <div className="custom-toggle">
-                        <input type="checkbox" id="theme-toggle" className="toggle-input"></input>
-                        <label className="toggle-label">
-                            <span className="toggle-track">
-                                <span className="toggle-knob"></span>
-                            </span>
-                        </label>
-                    </div>
-                    <button className="burger-menu">
-                        <span className="bar"></span>
-                        <span className="bar"></span>
-                        <span className="bar"></span>
-                    </button>
-                </div>
-            </div>
-        </header>)
+const HeaderContent = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+`;
+
+const LogoLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  img {
+    height: 40px;
+  }
+`;
+
+const Nav = styled.nav`
+  display: flex;
+  gap: 2rem;
+
+  ${media.tablet} {
+    display: none;
+  }
+`;
+
+const NavLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.accent};
+    background-color: ${({ theme }) => theme.colors.bgHover};
+  }
+
+  &.active {
+    color: ${({ theme }) => theme.colors.accent};
+    font-weight: 600;
+  }
+`;
+
+export default function Header() {
+  const location = useLocation();
+  const isActive = (path) => location.pathname === path;
+
+  return (
+    <StyledHeader>
+      <HeaderContent>
+        <LogoLink to="/">
+          <img src={logoImage} alt="Euphoria Logo" />
+        </LogoLink>
+
+        <Nav>
+          <NavLink to="/home" className={isActive('/home') ? 'active' : ''}>
+            Home
+          </NavLink>
+          <NavLink to="/catalog" className={isActive('/catalog') ? 'active' : ''}>
+            Catalog
+          </NavLink>
+        </Nav>
+      </HeaderContent>
+    </StyledHeader>
+  );
 }
-
-export default Header;

@@ -1,13 +1,13 @@
 import Header from '../../components/Header/Header.js';
 import Footer from '../../components/Footer/Footer.js';
-import Container from '../../components/Container/container';
+import CatalogContent from '../../components/CatalogContent/CatalogContent.js';
 import "./catalog.css"
 
 function Catalog() {
     return(
         <div>
             <Header/>
-            <Container/>
+            <CatalogContent/>
             <Footer/>
         </div>
     );

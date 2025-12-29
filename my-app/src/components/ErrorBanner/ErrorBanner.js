@@ -1,20 +1,58 @@
-import {Link} from "react-router-dom";
+// src/components/ErrorBanner/ErrorBanner.js
+import { Link } from "react-router-dom";
+import styled from 'styled-components';
+import { Button } from '../UI/Button/Button';
+import { Typography } from '../UI/Typography/Typography';
+import { Container as UIContainer } from '../UI/Container/Container';
 
-function ErrorBanner() {
-    return (
-        <main className ="error-container">
-            <div className ="error-content">
-                <div className ="error-image-container">
-                    <span className ="error-digit digit-4">4</span>
-                    <span className ="error-digit digit-0">0</span>
-                    <span className ="error-digit digit-4-rotated">4</span>
-                </div>
-                <h1 className ="error-title">Oops! Page not found</h1>
-                <p className ="error-message">The page you are looking for might have been removed or temporarily unavailable.</p>
-                <Link className ="back-home-btn"to="/home">Back to HomePage</Link>
-            </div>
-        </main>
-    );
+const ErrorContainer = styled.div`
+  padding: ${({ theme }) => theme.spacing[12]} ${({ theme }) => theme.spacing[4]};
+  text-align: center;
+  background: ${({ theme }) => theme.colors.background};
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ErrorDigits = styled.div`
+  font-size: 8rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: ${({ theme }) => theme.spacing[6]};
+  color: ${({ theme }) => theme.colors.secondary};
+  letter-spacing: -0.05em;
+  
+  span {
+    display: inline-block;
+    margin: 0 ${({ theme }) => theme.spacing[2]};
+  }
+  
+  .rotated {
+    transform: rotate(28deg);
+  }
+`;
+
+export default function ErrorBanner() {
+  return (
+    <ErrorContainer>
+      <UIContainer>
+        <ErrorDigits>
+          <span>4</span>
+          <span>0</span>
+          <span className="rotated">4</span>
+        </ErrorDigits>
+        <Typography variant="h2" $gutterBottom>
+          Oops! Page not found
+        </Typography>
+        <Typography variant="body" $gutterBottom>
+          The page you are looking for might have been removed or temporarily unavailable.
+        </Typography>
+        <Button as={Link} to="/home" variant="primary" size="medium">
+          Back to Home
+        </Button>
+      </UIContainer>
+    </ErrorContainer>
+  );
 }
-
-export default ErrorBanner;
