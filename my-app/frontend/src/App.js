@@ -1,53 +1,44 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { store } from './store/store';
-import Layout from './components/Layouts/Layout';
-import HomePage from './pages/HomePage';
-import UsersPage from './pages/UsersPage';
-import UserDetailPage from './pages/UserDetailPage';
-import TripsPage from './pages/TripsPage';
-import TripDetailPage from './pages/TripDetailPage';
-import DestinationsPage from './pages/DestinationsPage';
-import DestinationDetailPage from './pages/DestinationDetailPage';
-import ActivitiesPage from './pages/ActivitiesPage';
-import ActivityDetailPage from './pages/ActivityDetailPage';
+import { Container } from '@mui/material';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-  },
-});
+import AppHeader from './components/AppHeader';
+
+import CountriesPage from './pages/Countries/CountriesPage';
+import CountryDetail from './pages/Countries/CountryDetail';
+import CountryForm from './pages/Countries/CountryForm';
+
+import RoutesPage from './pages/Routes/RoutesPage';
+import RouteDetail from './pages/Routes/RouteDetail';
+import RouteForm from './pages/Routes/RouteForm';
+
+import SalesPage from './pages/Sales/SalesPage';
+import SaleDetail from './pages/Sales/SaleDetail';
+import SaleForm from './pages/Sales/SaleForm';
 
 function App() {
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Router>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/users" element={<UsersPage />} />
-              <Route path="/users/:id" element={<UserDetailPage />} />
-              <Route path="/trips" element={<TripsPage />} />
-              <Route path="/trips/:id" element={<TripDetailPage />} />
-              <Route path="/destinations" element={<DestinationsPage />} />
-              <Route path="/destinations/:id" element={<DestinationDetailPage />} />
-              <Route path="/activities" element={<ActivitiesPage />} />
-              <Route path="/activities/:id" element={<ActivityDetailPage />} />
-              <Route path="*" element={<HomePage />} />
-            </Routes>
-          </Layout>
-        </Router>
-      </ThemeProvider>
-    </Provider>
+    <Router>
+      <AppHeader />
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Routes>
+          <Route path="/" element={<CountriesPage />} />
+          <Route path="/countries" element={<CountriesPage />} />
+          <Route path="/countries/add" element={<CountryForm />} />
+          <Route path="/countries/edit/:id" element={<CountryForm />} />
+          <Route path="/countries/:id" element={<CountryDetail />} />
+
+          <Route path="/routes" element={<RoutesPage />} />
+          <Route path="/routes/add" element={<RouteForm />} />
+          <Route path="/routes/edit/:id" element={<RouteForm />} />
+          <Route path="/routes/:id" element={<RouteDetail />} />
+
+          <Route path="/sales" element={<SalesPage />} />
+          <Route path="/sales/add" element={<SaleForm />} />
+          <Route path="/sales/edit/:id" element={<SaleForm />} />
+          <Route path="/sales/:id" element={<SaleDetail />} />
+        </Routes>
+      </Container>
+    </Router>
   );
 }
 
