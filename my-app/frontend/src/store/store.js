@@ -1,14 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-import usersReducer from './slices/usersSlice';
-import tripsReducer from './slices/tripsSlice';
-import destinationsReducer from './slices/destinationsSlice';
-import activitiesReducer from './slices/activitiesSlice';
+import countryReducer from './slices/countrySlice';
+import routeReducer from './slices/routeSlice';
+import saleReducer from './slices/saleSlice';
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
-    users: usersReducer,
-    trips: tripsReducer,
-    destinations: destinationsReducer,
-    activities: activitiesReducer,
-  },
+    countries: countryReducer,
+    routes: routeReducer,
+    sales: saleReducer,
+  }
 });
+
+export default store;
