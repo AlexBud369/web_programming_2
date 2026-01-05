@@ -1,6 +1,5 @@
-const { Op } = require('sequelize');
 const AbstractRepository = require('./abstract.repository');
-const { Country } = require('../models');
+const Country = require('../models/country.model');
 
 class CountryRepository extends AbstractRepository {
   constructor() {
@@ -8,21 +7,20 @@ class CountryRepository extends AbstractRepository {
   }
 
   async getAllWithPaginationAndFilters({ page = 1, limit = 10, sort = 'createdAt', order = 'ASC', filters = {}, search = '' }) {
-    const offset = (page - 1) * limit;
-    const where = { ...filters };
-
+    const query = { ...filters };
+    
     if (search) {
-      where[Op.or] = Country.searchFields.map(field => ({
-        [field]: { [Op.iLike]: `%${search}%` }
-      }));
+      query.$or = [
+        { code: { $regex: search, $options: 'i' } },
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
     }
-
-    return await this.findAndCountAll({
-      where,
-      order: [[sort, order]],
-      limit,
-      offset
-    });
+    
+    const sortObj = {};
+    sortObj[sort] = order === 'ASC' ? 1 : -1;
+    
+    return await this.findAll(query, sortObj, page, limit);
   }
 }
 

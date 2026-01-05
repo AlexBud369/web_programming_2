@@ -1,6 +1,5 @@
-const { Op } = require('sequelize');
 const AbstractRepository = require('./abstract.repository');
-const { Route } = require('../models');
+const Route = require('../models/route.model');
 
 class RouteRepository extends AbstractRepository {
   constructor() {
@@ -8,21 +7,28 @@ class RouteRepository extends AbstractRepository {
   }
 
   async getAllWithPaginationAndFilters({ page = 1, limit = 10, sort = 'createdAt', order = 'ASC', filters = {}, search = '' }) {
-    const offset = (page - 1) * limit;
-    const where = { ...filters };
-
+    const query = { ...filters };
+    
     if (search) {
-      where[Op.or] = Route.searchFields.map(field => ({
-        [field]: { [Op.iLike]: `%${search}%` }
-      }));
+      query.$or = [
+        { code: { $regex: search, $options: 'i' } },
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
     }
+    
+    const sortObj = {};
+    sortObj[sort] = order === 'ASC' ? 1 : -1;
+    
+    return await this.findAll(query, sortObj, page, limit);
+  }
 
-    return await this.findAndCountAll({
-      where,
-      order: [[sort, order]],
-      limit,
-      offset
-    });
+  async findOneByCode(code) {
+    return await this.model.findOne({ code });
+  }
+
+  async findByCountryId(countryId) {
+    return await this.model.find({ countryId });
   }
 }
 

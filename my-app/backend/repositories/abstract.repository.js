@@ -4,36 +4,45 @@ class AbstractRepository {
   }
 
   async create(data) {
-    return await this.model.create(data);
-  }
-
-  async findAll(options = {}) {
-    return await this.model.findAll(options);
-  }
-
-  async findAndCountAll(options = {}) {
-    return await this.model.findAndCountAll(options);
+    const document = new this.model(data);
+    return await document.save();
   }
 
   async findById(id) {
-    return await this.model.findByPk(id);
+    return await this.model.findById(id);
+  }
+
+  async findAll(query = {}, sort = {}, page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+    
+    const [data, total] = await Promise.all([
+      this.model.find(query)
+        .sort(sort)
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      this.model.countDocuments(query)
+    ]);
+    
+    return {
+      rows: data,
+      count: total
+    };
   }
 
   async update(id, data) {
-    const entity = await this.findById(id);
-    if (!entity) return null;
-    return await entity.update(data);
+    const options = { new: true, runValidators: true };
+    return await this.model.findByIdAndUpdate(id, data, options);
   }
 
   async delete(id) {
-    const entity = await this.findById(id);
-    if (!entity) return null;
-    await entity.destroy();
-    return true;
+    const deleted = await this.model.findByIdAndDelete(id);
+    return deleted !== null;
   }
 
   async exists(id) {
-    return await this.model.findByPk(id) !== null;
+    const count = await this.model.countDocuments({ _id: id });
+    return count > 0;
   }
 }
 
