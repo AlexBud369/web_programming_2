@@ -17,24 +17,24 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  if (err.name === 'SequelizeValidationError') {
+  if (err.name === 'ValidationError') {
     return res.status(400).json({
       message: 'Проверьте введённые данные',
       success: false,
-      errors: err.errors.map(e => ({ 
+      errors: Object.values(err.errors).map(e => ({ 
         field: e.path, 
         message: e.message 
       }))
     });
   }
 
-  if (err.name === 'SequelizeUniqueConstraintError') {
+  if (err.code === 11000) {
     return res.status(409).json({
       message: 'Объект с таким значением уже существует',
       success: false,
-      errors: err.errors.map(e => ({ 
-        field: e.path, 
-        message: e.message 
+      errors: Object.keys(err.keyPattern).map(field => ({ 
+        field: field, 
+        message: `Значение должно быть уникальным` 
       }))
     });
   }
@@ -47,6 +47,22 @@ const errorHandler = (err, req, res, next) => {
       message: err.message,
       success: false,
       errors: err.errors
+    });
+  }
+
+  if (err.name === 'CastError') {
+    return res.status(400).json({
+      message: 'Некорректный формат ID',
+      success: false
+    });
+  }
+
+  if (err.message.includes('существуют связанные') || 
+      err.message.includes('невозможно удалить')) {
+    return res.status(err.statusCode || 400).json({
+      message: err.message,
+      success: false,
+      relatedCount: err.relatedRoutesCount || err.relatedSalesCount
     });
   }
 

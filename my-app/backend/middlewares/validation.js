@@ -1,4 +1,5 @@
 const { validationResult, body, param } = require('express-validator');
+const mongoose = require('mongoose');
 
 const COUNTRY_CODE_MIN_LEN = 2;
 const COUNTRY_CODE_MAX_LEN = 10;
@@ -28,7 +29,7 @@ const validate = (req, res, next) => {
 
 const validateIdParam = [
   param('id')
-    .isInt({ min: 1 }).withMessage('ID должен быть положительным целым числом'),
+    .isMongoId().withMessage('ID должен быть корректным MongoDB ObjectId'),
   validate
 ];
 
@@ -101,8 +102,7 @@ const validateRoute = [
   
   body('countryId')
     .notEmpty().withMessage('ID страны обязателен')
-    .isInt({ min: 1 }).withMessage('ID страны должен быть положительным целым числом')
-    .toInt(),
+    .isMongoId().withMessage('ID страны должен быть корректным MongoDB ObjectId'),
   
   validate
 ];
@@ -148,8 +148,7 @@ const validateSale = [
   
   body('routeId')
     .notEmpty().withMessage('ID маршрута обязателен')
-    .isInt({ min: 1 }).withMessage('ID маршрута должен быть положительным целым числом')
-    .toInt(),
+    .isMongoId().withMessage('ID маршрута должен быть корректным MongoDB ObjectId'),
   
   validate
 ];
