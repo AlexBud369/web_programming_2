@@ -54,7 +54,12 @@ export const removeRoute = createAsyncThunk(
       await deleteRoute(id);
       return id;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue({
+        message: error.message,
+        status: error.status,
+        data: error.data,
+        id: id
+      });
     }
   }
 );

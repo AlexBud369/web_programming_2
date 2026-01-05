@@ -1,9 +1,18 @@
 import api from './api';
 
+const normalizeItem = (item) => ({
+  ...item,
+  id: item.id || item._id
+});
+
 export const getRoutes = async (params) => {
   try {
     const response = await api.get('/routes', { params });
-    return response.data;
+    const normalizedData = {
+      ...response.data,
+      data: response.data.data?.map(normalizeItem) || []
+    };
+    return normalizedData;
   } catch (error) {
     console.error('Error fetching routes:', error.response?.data || error.message);
     throw error;
@@ -13,7 +22,7 @@ export const getRoutes = async (params) => {
 export const getRouteById = async (id) => {
   try {
     const response = await api.get(`/routes/${id}`);
-    return response.data;
+    return normalizeItem(response.data);
   } catch (error) {
     console.error(`Error fetching route ${id}:`, error.response?.data || error.message);
     throw error;
@@ -22,25 +31,16 @@ export const getRouteById = async (id) => {
 
 export const createRoute = async (data) => {
   try {
-    console.log('Creating route with data:', data);
-    
     const formattedData = {
       ...data,
       price: data.price ? parseFloat(data.price.toString().replace(',', '.')) : 0,
       durationDays: data.durationDays ? parseInt(data.durationDays.toString()) : 1,
-      countryId: parseInt(data.countryId),
       isActive: data.isActive === 'true' || data.isActive === true
     };
     
-    console.log('Formatted route data:', formattedData);
-    
     const response = await api.post('/routes', formattedData);
-    console.log('Route created successfully:', response.data);
-    return response.data;
+    return normalizeItem(response.data);
   } catch (error) {
-    console.error('Error creating route:', error);
-    console.error('Server error response:', error.response?.data);
-    
     const serverError = error.response?.data;
     let errorMessage = 'Ошибка при создании маршрута';
     
@@ -63,18 +63,13 @@ export const updateRoute = async (id, data) => {
     if (data.durationDays) {
       formattedData.durationDays = parseInt(data.durationDays.toString());
     }
-    if (data.countryId) {
-      formattedData.countryId = parseInt(data.countryId);
-    }
     if (data.isActive !== undefined) {
       formattedData.isActive = data.isActive === 'true' || data.isActive === true;
     }
     
     const response = await api.put(`/routes/${id}`, formattedData);
-    return response.data;
+    return normalizeItem(response.data);
   } catch (error) {
-    console.error(`Error updating route ${id}:`, error.response?.data || error.message);
-    
     const serverError = error.response?.data;
     let errorMessage = 'Ошибка при обновлении маршрута';
     
@@ -93,7 +88,14 @@ export const deleteRoute = async (id) => {
     await api.delete(`/routes/${id}`);
   } catch (error) {
     console.error(`Error deleting route ${id}:`, error.response?.data || error.message);
-    throw error;
+    
+    const backendMessage = error.response?.data?.message || 'Ошибка при удалении маршрута';
+    
+    const cleanError = new Error(backendMessage);
+    cleanError.status = error.response?.status;
+    cleanError.data = error.response?.data;
+    
+    throw cleanError;
   }
 };
 

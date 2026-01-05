@@ -1,9 +1,18 @@
 import api from './api';
 
+const normalizeItem = (item) => ({
+  ...item,
+  id: item.id || item._id
+});
+
 export const getSales = async (params) => {
   try {
     const response = await api.get('/sales', { params });
-    return response.data;
+    const normalizedData = {
+      ...response.data,
+      data: response.data.data?.map(normalizeItem) || []
+    };
+    return normalizedData;
   } catch (error) {
     console.error('Error fetching sales:', error.response?.data || error.message);
     throw error;
@@ -13,7 +22,7 @@ export const getSales = async (params) => {
 export const getSaleById = async (id) => {
   try {
     const response = await api.get(`/sales/${id}`);
-    return response.data;
+    return normalizeItem(response.data);
   } catch (error) {
     console.error(`Error fetching sale ${id}:`, error.response?.data || error.message);
     throw error;
@@ -22,23 +31,15 @@ export const getSaleById = async (id) => {
 
 export const createSale = async (data) => {
   try {
-    console.log('Creating sale with data:', data);
-    
     const formattedData = {
       ...data,
       price: data.price ? parseFloat(data.price.toString().replace(',', '.')) : 0,
-      quantity: data.quantity ? parseInt(data.quantity.toString()) : 1,
-      routeId: parseInt(data.routeId)
+      quantity: data.quantity ? parseInt(data.quantity.toString()) : 1
     };
     
-    console.log('Formatted sale data:', formattedData);
-    
     const response = await api.post('/sales', formattedData);
-    return response.data;
+    return normalizeItem(response.data);
   } catch (error) {
-    console.error('Error creating sale:', error);
-    console.error('Server error response:', error.response?.data);
-    
     const serverError = error.response?.data;
     let errorMessage = 'Ошибка при создании продажи';
     
@@ -66,15 +67,10 @@ export const updateSale = async (id, data) => {
     if (data.quantity) {
       formattedData.quantity = parseInt(data.quantity.toString());
     }
-    if (data.routeId) {
-      formattedData.routeId = parseInt(data.routeId);
-    }
     
     const response = await api.put(`/sales/${id}`, formattedData);
-    return response.data;
+    return normalizeItem(response.data);
   } catch (error) {
-    console.error(`Error updating sale ${id}:`, error.response?.data || error.message);
-    
     const serverError = error.response?.data;
     let errorMessage = 'Ошибка при обновлении продажи';
     

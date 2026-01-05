@@ -1,9 +1,18 @@
 import api from './api';
 
+const normalizeItem = (item) => ({
+  ...item,
+  id: item.id || item._id
+});
+
 export const getCountries = async (params) => {
   try {
     const response = await api.get('/countries', { params });
-    return response.data;
+    const normalizedData = {
+      ...response.data,
+      data: response.data.data?.map(normalizeItem) || []
+    };
+    return normalizedData;
   } catch (error) {
     console.error('Error fetching countries:', error.response?.data || error.message);
     throw error;
@@ -13,7 +22,7 @@ export const getCountries = async (params) => {
 export const getCountryById = async (id) => {
   try {
     const response = await api.get(`/countries/${id}`);
-    return response.data;
+    return normalizeItem(response.data);
   } catch (error) {
     console.error(`Error fetching country ${id}:`, error.response?.data || error.message);
     throw error;
@@ -24,11 +33,11 @@ export const createCountry = async (data) => {
   try {
     const formattedData = {
       ...data,
-      visaCost: data.visaCost ? parseFloat(data.visaCost.toString().replace(',', '.')) : 0  // Handle locale comma
+      visaCost: data.visaCost ? parseFloat(data.visaCost.toString().replace(',', '.')) : 0
     };
 
     const response = await api.post('/countries', formattedData);
-    return response.data;
+    return normalizeItem(response.data);
   } catch (error) {
     const serverError = error.response?.data;
     let errorMessage = 'Ошибка при создании страны';
@@ -50,7 +59,7 @@ export const updateCountry = async (id, data) => {
       visaCost: data.visaCost ? parseFloat(data.visaCost.toString().replace(',', '.')) : 0
     };
     const response = await api.put(`/countries/${id}`, formattedData);
-    return response.data;
+    return normalizeItem(response.data);
   } catch (error) {
     console.error(`Error updating country ${id}:`, error.response?.data || error.message);
     throw error;
