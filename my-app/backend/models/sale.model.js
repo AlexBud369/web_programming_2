@@ -1,97 +1,71 @@
-const { DataTypes } = require('sequelize');
+const mongoose = require('mongoose');
+const validator = require('validator');
 
-module.exports = (sequelize) => {
-  const Sale = sequelize.define('Sale', {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
-    },
-    purpose: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-      validate: {
-        isIn: {
-          args: [['отдых', 'экскурсия', 'лечение', 'шоп-тур', 'обучение', 'деловая']],
-          msg: 'Недопустимая цель поездки'
-        }
-      }
-    },
-    price: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-      defaultValue: 0,
-      validate: {
-        isDecimal: { 
-          msg: 'Цена должна быть числом'
-        },
-        min: 0
-      }
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 1,
-      validate: {
-        min: {
-          args: [1], 
-          msg: 'Количество должно быть не меньше 1'
-        }
-      }
-    },
-    saleDate: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW
-    },
-    customerName: {
-      type: DataTypes.STRING(200),
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Имя клиента обязательно'
-        }
-      }
-    },
-    customerEmail: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-      validate: {
-        isEmail: {
-          msg: 'Недопустимый email'
-        }
-      }
-    },
-    status: {
-      type: DataTypes.STRING(20),
-      defaultValue: 'confirmed',
-      validate: {
-        isIn: {
-          args: [['pending', 'confirmed', 'cancelled', 'completed']],
-          msg: 'Недопустимый статус'
-        }
-      }
-    },
-    routeId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        min: {
-          args: [1], 
-          msg: 'ID маршрута должен быть положительным'
-        }
-      }
+const saleSchema = new mongoose.Schema({
+  purpose: {
+    type: String,
+    required: [true, 'Цель поездки обязательна'],
+    enum: {
+      values: ['отдых', 'экскурсия', 'лечение', 'шоп-тур', 'обучение', 'деловая'],
+      message: 'Недопустимая цель поездки'
     }
-  }, {
-    tableName: 'sales',
-    timestamps: true,
-    indexes: [
-      { fields: ['saleDate'] },
-      { fields: ['status'] }
-    ]
-  });
+  },
+  price: {
+    type: Number,
+    required: [true, 'Цена обязательна'],
+    min: [0, 'Цена не может быть отрицательной'],
+    default: 0
+  },
+  quantity: {
+    type: Number,
+    required: [true, 'Количество обязательно'],
+    min: [1, 'Количество должно быть не меньше 1'],
+    default: 1
+  },
+  saleDate: {
+    type: Date,
+    required: [true, 'Дата продажи обязательна'],
+    default: Date.now
+  },
+  customerName: {
+    type: String,
+    required: [true, 'Имя клиента обязательно'],
+    maxlength: [200, 'Имя должно быть не более 200 символов'],
+    trim: true
+  },
+  customerEmail: {
+    type: String,
+    required: [true, 'Email клиента обязателен'],
+    validate: {
+      validator: validator.isEmail,
+      message: 'Недопустимый email'
+    },
+    trim: true,
+    lowercase: true
+  },
+  status: {
+    type: String,
+    enum: {
+      values: ['pending', 'confirmed', 'cancelled', 'completed'],
+      message: 'Недопустимый статус'
+    },
+    default: 'confirmed'
+  },
+  routeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Route',
+    required: [true, 'ID маршрута обязателен']
+  }
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
 
-  Sale.searchFields = ['purpose', 'customerName', 'customerEmail'];
+saleSchema.index({ saleDate: -1 });
+saleSchema.index({ status: 1 });
+saleSchema.index({ routeId: 1 });
+saleSchema.index({ customerEmail: 1 });
 
-  return Sale;
-};
+const Sale = mongoose.model('Sale', saleSchema);
+module.exports = Sale;

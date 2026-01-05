@@ -1,67 +1,50 @@
-const { DataTypes } = require('sequelize');
+const mongoose = require('mongoose');
 const validator = require('validator');
 
-module.exports = (sequelize) => {
-  const Country = sequelize.define('Country', {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
-    },
-    code: {
-      type: DataTypes.STRING(10),
-      allowNull: false,
-      unique: {
-        msg: 'Код страны уже существует'
+const countrySchema = new mongoose.Schema({
+  code: {
+    type: String,
+    required: [true, 'Код страны обязателен'],
+    unique: true,
+    minlength: [2, 'Код должен быть не менее 2 символов'],
+    maxlength: [10, 'Код должен быть не более 10 символов'],
+    trim: true
+  },
+  name: {
+    type: String,
+    required: [true, 'Название страны обязательно'],
+    maxlength: [100, 'Название должно быть не более 100 символов'],
+    trim: true
+  },
+  visaCost: {
+    type: Number,
+    required: [true, 'Стоимость визы обязательна'],
+    min: [0, 'Стоимость визы не может быть отрицательной'],
+    default: 0
+  },
+  description: {
+    type: String,
+    trim: true
+  },
+  flagImage: {
+    type: String,
+    validate: {
+      validator: function(v) {
+        if (!v || v.trim() === '') return true;
+        return validator.isURL(v);
       },
-      validate: {
-        len: {
-          args: [2, 10],
-          msg: 'Код должен быть от 2 до 10 символов'
-        }
-      }
+      message: 'Недопустимый URL для флага'
     },
-    name: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Название страны обязательно'
-        }
-      }
-    },
-    visaCost: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-      defaultValue: 0,
-      validate: {
-        isDecimal: {
-          msg: 'Стоимость визы должна быть числом'
-        },
-        min: 0  
-      }
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
-    flagImage: {
-      type: DataTypes.STRING(500),
-      allowNull: true,
-      validate: {
-        isValidUrl(value) {
-          if (value && value.trim() !== '' && !validator.isURL(value)) {
-            throw new Error('Недопустимый URL для флага');
-          }
-        }
-      }
-    }
-  }, {
-    tableName: 'countries',
-    timestamps: true
-  });
+    trim: true
+  }
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
 
-  Country.searchFields = ['code', 'name', 'description'];
+countrySchema.index({ code: 1 });
+countrySchema.index({ name: 1 });
 
-  return Country;
-};
+const Country = mongoose.model('Country', countrySchema);
+module.exports = Country;
