@@ -1,21 +1,15 @@
 require('dotenv').config();
 const app = require('./app');
+const connectDB = require('./config/database');
 
 const PORT = process.env.PORT || 5000;
-const { sequelize } = require('./models');
 
 const startServer = async () => {
   try {
-    console.log('Попытка подключения к базе данных...');
+    console.log('Попытка подключения к MongoDB...');
     
-    await sequelize.authenticate();
-    console.log('Соединение с базой данных установлено успешно');
-    
-    await sequelize.sync({ 
-      force: false,
-      alter: process.env.NODE_ENV === 'development'
-    });
-    console.log('Модели синхронизированы с базой данных');
+    await connectDB();
+    console.log('Соединение с MongoDB установлено успешно');
     
     app.listen(PORT, () => {
       console.log(`Сервер запущен на порту ${PORT}`);
@@ -27,11 +21,11 @@ const startServer = async () => {
     console.error('Не удалось запустить сервер:', error.message);
     console.error('Stack trace:', error.stack);
     
-    if (error.name === 'SequelizeConnectionError') {
+    if (error.name === 'MongoServerSelectionError') {
       console.error('Проверьте:');
-      console.error('1. Запущена ли база данных PostgreSQL');
-      console.error('2. Правильность настроек в .env файле');
-      console.error('3. Доступность хоста и порта БД');
+      console.error('1. Запущен ли сервер MongoDB');
+      console.error('2. Правильность MONGODB_URI в .env файле');
+      console.error('3. Доступность localhost:27017');
     }
     
     process.exit(1);
