@@ -1,70 +1,72 @@
-# Getting Started with Create React App
+1. Создание страны:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+text
+Метод: POST
+URL: http://localhost:5000/api/countries
+Body (JSON):
+{
+  "code": "US",
+  "name": "Соединенные Штаты Америки",
+  "visaCost": 160,
+  "description": "Североамериканская страна, состоящая из 50 штатов",
+  "flagImage": "https://flagcdn.com/w320/us.png"
+}
+2. Получение списка с пагинацией:
 
-## Available Scripts
+text
+Метод: GET
+URL: http://localhost:5000/api/countries?page=1&limit=10
+3. Получение с сортировкой:
 
-In the project directory, you can run:
+text
+Метод: GET
+URL: http://localhost:5000/api/countries?sort=visaCost&order=DESC&page=1&limit=5
+4. Получение с фильтрацией:
 
-### `npm start`
+text
+Метод: GET
+URL: http://localhost:5000/api/countries?visaCost=80&name=Франция
+5. Получение с поиском:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+text
+Метод: GET
+URL: http://localhost:5000/api/countries?search=фран
+6. Получение по ID:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+text
+Метод: GET
+URL: http://localhost:5000/api/countries/{id}
+7. Обновление страны:
 
-### `npm test`
+text
+Метод: PUT
+URL: http://localhost:5000/api/countries/{id}
+Body (JSON):
+{
+  "code": "FR",
+  "name": "Франция",
+  "visaCost": 85,
+  "description": "Обновленное описание",
+  "flagImage": "https://flagcdn.com/w320/fr.png"
+}
+8. Удаление страны:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+text
+Метод: DELETE
+URL: http://localhost:5000/api/countries/{id}
+9. Проверка существования:
 
-### `npm run build`
+text
+Метод: HEAD
+URL: http://localhost:5000/api/countries/{id}
+10. Тест ошибки валидации:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+text
+Метод: POST
+URL: http://localhost:5000/api/countries
+Body (JSON):
+{
+  "code": "F", // Ошибка: меньше 2 символов
+  "name": "", // Ошибка: пустое поле
+  "visaCost": -10 // Ошибка: отрицательное значение
+}
