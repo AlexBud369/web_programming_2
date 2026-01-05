@@ -1,57 +1,43 @@
 const routeRepository = require('../repositories/route.repository');
-const { Op } = require('sequelize');
-const { Route, Country } = require('../models');
+const Country = require('../models/country.model');
+const Sale = require('../models/sale.model');
 
 class RouteService {
-    async create(data) {
-      try {
-        console.log('RouteService.create received:', data);
-        
-        const existingRoute = await Route.findOne({
-          where: { code: data.code }
-        });
-        
-        if (existingRoute) {
-          const error = new Error(`Маршрут с кодом '${data.code}' уже существует`);
-          error.statusCode = 409;
-          throw error;
-        }
-
-        const country = await Country.findByPk(data.countryId);
-        if (!country) {
-          const error = new Error('Указанная страна не найдена');
-          error.statusCode = 404;
-          throw error;
-        }
-
-        const processedData = {
-          ...data,
-          durationDays: parseInt(data.durationDays),
-          countryId: parseInt(data.countryId),
-          isActive: data.isActive === 'true' || data.isActive === true
-        };
-
-        console.log('Processed route data:', processedData);
-        
-        const testRoute = Route.build(processedData);
-        await testRoute.validate();
-        
-        return await routeRepository.create(processedData);
-      } catch (err) {
-        console.log('Create route error:', err.message);
-        
-        if (err.name === 'SequelizeValidationError') {
-          const validationError = new Error('Ошибка валидации данных маршрута');
-          validationError.errors = err.errors.map(e => ({
-            field: e.path,
-            message: e.message
-          }));
-          validationError.statusCode = 400;
-          throw validationError;
-        }
-        
-        throw err;
+  async create(data) {
+    try {
+      const existingRoute = await routeRepository.findOneByCode(data.code);
+      if (existingRoute) {
+        const error = new Error(`Маршрут с кодом '${data.code}' уже существует`);
+        error.statusCode = 409;
+        throw error;
       }
+
+      const country = await Country.findById(data.countryId);
+      if (!country) {
+        const error = new Error('Указанная страна не найдена');
+        error.statusCode = 404;
+        throw error;
+      }
+
+      const processedData = {
+        ...data,
+        durationDays: parseInt(data.durationDays),
+        isActive: data.isActive === 'true' || data.isActive === true
+      };
+
+      return await routeRepository.create(processedData);
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        const validationError = new Error('Ошибка валидации данных маршрута');
+        validationError.errors = Object.values(error.errors).map(e => ({
+          field: e.path,
+          message: e.message
+        }));
+        validationError.statusCode = 400;
+        throw validationError;
+      }
+      throw error;
+    }
   }
 
   async getAll({ page, limit, sort, order, filters, search }) {
@@ -67,61 +53,93 @@ class RouteService {
 
   async getById(id) {
     const route = await routeRepository.findById(id);
-    if (!route) throw new Error('Маршрут не найден');
+    if (!route) {
+      const error = new Error('Маршрут не найден');
+      error.statusCode = 404;
+      throw error;
+    }
     return route;
   }
 
   async update(id, data) {
     try {
       if (data.code) {
-        const existingRoute = await Route.findOne({
-          where: { 
-            code: data.code,
-            id: { [Op.ne]: id }
-          }
-        });
-        
-        if (existingRoute) {
-          throw new Error(`Маршрут с кодом '${data.code}' уже существует`);
+        const existingRoute = await routeRepository.findOneByCode(data.code);
+        if (existingRoute && existingRoute._id.toString() !== id) {
+          const error = new Error(`Маршрут с кодом '${data.code}' уже существует`);
+          error.statusCode = 409;
+          throw error;
         }
       }
 
       if (data.countryId) {
-        const country = await Country.findByPk(data.countryId);
-        if (!country) throw new Error('Указанная страна не найдена');
+        const country = await Country.findById(data.countryId);
+        if (!country) {
+          const error = new Error('Указанная страна не найдена');
+          error.statusCode = 404;
+          throw error;
+        }
       }
 
       const processedData = { ...data };
-      if (data.price !== undefined) {
-        processedData.price = typeof data.price === 'string' 
-          ? parseFloat(data.price.replace(',', '.')) 
-          : data.price;
-      }
       if (data.durationDays !== undefined) {
-        processedData.durationDays = typeof data.durationDays === 'string'
-          ? parseInt(data.durationDays)
-          : data.durationDays;
-      }
-      if (data.countryId !== undefined) {
-        processedData.countryId = parseInt(data.countryId);
+        processedData.durationDays = parseInt(data.durationDays);
       }
       if (data.isActive !== undefined) {
         processedData.isActive = data.isActive === 'true' || data.isActive === true;
       }
 
       const updated = await routeRepository.update(id, processedData);
-      if (!updated) throw new Error('Маршрут не найден');
+      if (!updated) {
+        const error = new Error('Маршрут не найден');
+        error.statusCode = 404;
+        throw error;
+      }
       return updated;
-    } catch (err) {
-      console.log('Update route error:', err.message);
-      throw err;
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        const validationError = new Error('Ошибка валидации данных маршрута');
+        validationError.errors = Object.values(error.errors).map(e => ({
+          field: e.path,
+          message: e.message
+        }));
+        validationError.statusCode = 400;
+        throw validationError;
+      }
+      throw error;
     }
   }
 
   async delete(id) {
-    const deleted = await routeRepository.delete(id);
-    if (!deleted) throw new Error('Маршрут не найден');
-    return deleted;
+    try {
+      const relatedSales = await Sale.find({ routeId: id });
+      
+      if (relatedSales.length > 0) {
+        const error = new Error('Невозможно удалить маршрут: существуют связанные продажи');
+        error.statusCode = 400;
+        error.relatedSalesCount = relatedSales.length;
+        throw error;
+      }
+      
+      const deleted = await routeRepository.delete(id);
+      if (!deleted) {
+        const error = new Error('Маршрут не найден');
+        error.statusCode = 404;
+        throw error;
+      }
+      return deleted;
+    } catch (error) {
+      console.error('Error in routeService.delete:', error);
+      
+      if (error.statusCode) {
+        throw error;
+      }
+      
+      const serviceError = new Error('Ошибка при удалении маршрута');
+      serviceError.statusCode = 500;
+      serviceError.originalError = error.message;
+      throw serviceError;
+    }
   }
 
   async exists(id) {
