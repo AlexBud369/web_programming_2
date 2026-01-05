@@ -62,7 +62,7 @@ const RouteForm = () => {
         name: current.name || '',
         durationDays: current.durationDays ? current.durationDays.toString() : '',
         price: current.price ? current.price.toString() : '',
-        countryId: current.countryId ? current.countryId.toString() : '',
+        countryId: current.countryId || '',
         isActive: current.isActive || true,
         description: current.description || '',
         imageUrl: current.imageUrl || ''
@@ -77,15 +77,15 @@ const RouteForm = () => {
         ...data,
         durationDays: parseInt(data.durationDays) || 1,
         price: data.price ? parseFloat(data.price.toString().replace(',', '.')) : 0,
-        countryId: parseInt(data.countryId) || 0,
+        countryId: data.countryId,
         isActive: data.isActive === 'true' || data.isActive === true
       };
       
-      if (formattedData.countryId === 0) {
+      if (!formattedData.countryId) {
         toast.error('Выберите страну');
         return;
       }
-      
+
       if (isEdit) {
         await dispatch(editRoute({ id, data: formattedData })).unwrap();
         toast.success('Маршрут успешно обновлен');

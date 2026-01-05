@@ -38,7 +38,7 @@ const EntityCard = ({ entity, titleField = 'name', imageField = 'flagImage', fie
           <Button component={Link} to={basePath} variant="outlined" sx={{ mr: 2 }}>
             Назад к списку
           </Button>
-          <Button component={Link} to={`${basePath}/edit/${entity.id}`} variant="contained">
+          <Button component={Link} to={`${basePath}/edit/${entity.id || entity._id}`} variant="contained">
             Редактировать
           </Button>
         </Box>

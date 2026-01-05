@@ -43,20 +43,20 @@ const DataTable = ({
           </TableHead>
           <TableBody>
             {data.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow key={row.id || row._id}>
                 {columns.map((col) => (
                   <TableCell key={col.id}>
                     {col.render ? col.render(row) : row[col.id]}
                   </TableCell>
                 ))}
                 <TableCell align="center">
-                  <IconButton component={Link} to={`${basePath}/${row.id}`}>
+                  <IconButton component={Link} to={`${basePath}/${row.id || row._id}`}>
                     <VisibilityIcon />
                   </IconButton>
-                  <IconButton component={Link} to={`${basePath}/edit/${row.id}`}>
+                  <IconButton component={Link} to={`${basePath}/edit/${row.id || row._id}`}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => onDelete(row.id)} color="error">
+                  <IconButton onClick={() => onDelete(row.id || row._id)} color="error">
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>

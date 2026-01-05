@@ -75,7 +75,7 @@ const SaleForm = () => {
         ...data,
         price: data.price ? parseFloat(data.price.toString().replace(',', '.')) : 0,
         quantity: parseInt(data.quantity) || 1,
-        routeId: parseInt(data.routeId),
+        routeId: data.routeId,
         saleDate: data.saleDate ? new Date(data.saleDate) : new Date()
       };
 
