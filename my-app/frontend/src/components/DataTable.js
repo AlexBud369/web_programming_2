@@ -14,6 +14,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const DataTable = ({
   columns,
@@ -24,10 +25,21 @@ const DataTable = ({
   onDelete,
   basePath, 
   loading,
+  entityType = 'default', 
 }) => {
+  const { user } = useSelector((state) => state.auth);
+  const isAdmin = user?.role === 'admin';
+
   if (loading) return <p>Загрузка...</p>;
 
-  const totalPages = Math.ceil(total / 10); 
+  const totalPages = Math.ceil(total / 10);
+
+  const canEditRow = (row) => {
+    if (entityType === 'sales') {
+      return isAdmin || row.createdBy === user?.id;
+    }
+    return isAdmin;
+  };
 
   return (
     <>
@@ -42,26 +54,42 @@ const DataTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.id}>
-                {columns.map((col) => (
-                  <TableCell key={col.id}>
-                    {col.render ? col.render(row) : row[col.id]}
+            {data.map((row) => {
+              const canEdit = canEditRow(row);
+              return (
+                <TableRow key={row.id}>
+                  {columns.map((col) => (
+                    <TableCell key={col.id}>
+                      {col.render ? col.render(row) : row[col.id]}
+                    </TableCell>
+                  ))}
+                  <TableCell align="center">
+                    <IconButton component={Link} to={`${basePath}/${row.id}`}>
+                      <VisibilityIcon />
+                    </IconButton>
+                    
+                    {canEdit && (
+                      <>
+                        <IconButton 
+                          component={Link} 
+                          to={`${basePath}/edit/${row.id}`}
+                          disabled={!canEdit}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton 
+                          onClick={() => onDelete(row.id)} 
+                          color="error"
+                          disabled={!canEdit}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </>
+                    )}
                   </TableCell>
-                ))}
-                <TableCell align="center">
-                  <IconButton component={Link} to={`${basePath}/${row.id}`}>
-                    <VisibilityIcon />
-                  </IconButton>
-                  <IconButton component={Link} to={`${basePath}/edit/${row.id}`}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => onDelete(row.id)} color="error">
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
