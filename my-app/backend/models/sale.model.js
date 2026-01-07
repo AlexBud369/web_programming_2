@@ -81,6 +81,15 @@ module.exports = (sequelize) => {
           msg: 'ID маршрута должен быть положительным'
         }
       }
+    },
+    createdBy: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'users',
+        key: 'id'
+      },
+      onDelete: 'SET NULL'
     }
   }, {
     tableName: 'sales',
