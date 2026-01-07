@@ -1,4 +1,51 @@
 {
+  "users": [
+    {
+      "email": "admin@travelplanner.com",
+      "password": "admin123",
+      "firstName": "Администратор",
+      "lastName": "Системы",
+      "role": "admin",
+      "isActive": true,
+      "avatar": "https://ui-avatars.com/api/?name=Администратор+Системы&background=0D8ABC&color=fff"
+    },
+    {
+      "email": "user1@travelplanner.com",
+      "password": "user123",
+      "firstName": "Иван",
+      "lastName": "Петров",
+      "role": "user",
+      "isActive": true,
+      "avatar": "https://ui-avatars.com/api/?name=Иван+Петров&background=3B82F6&color=fff"
+    },
+    {
+      "email": "user2@travelplanner.com",
+      "password": "user123",
+      "firstName": "Мария",
+      "lastName": "Сидорова",
+      "role": "user",
+      "isActive": true,
+      "avatar": "https://ui-avatars.com/api/?name=Мария+Сидорова&background=10B981&color=fff"
+    },
+    {
+      "email": "user3@travelplanner.com",
+      "password": "user123",
+      "firstName": "Алексей",
+      "lastName": "Кузнецов",
+      "role": "user",
+      "isActive": true,
+      "avatar": "https://ui-avatars.com/api/?name=Алексей+Кузнецов&background=F59E0B&color=fff"
+    },
+    {
+      "email": "inactive@travelplanner.com",
+      "password": "user123",
+      "firstName": "Неактивный",
+      "lastName": "Пользователь",
+      "role": "user",
+      "isActive": false,
+      "avatar": "https://ui-avatars.com/api/?name=Неактивный+Пользователь&background=6B7280&color=fff"
+    }
+  ],
   "countries": [
     {"code": "US", "name": "United States", "visaCost": 160.00, "description": "Северная Америка, разнообразные ландшафты", "flagImage": "https://flagcdn.com/us.svg"},
     {"code": "RU", "name": "Russia", "visaCost": 0.00, "description": "Евразия, самая большая страна", "flagImage": "https://flagcdn.com/ru.svg"},
@@ -16,7 +63,15 @@
     {"code": "MX", "name": "Mexico", "visaCost": 40.00, "description": "Северная Америка, культура майя", "flagImage": "https://flagcdn.com/mx.svg"},
     {"code": "KR", "name": "South Korea", "visaCost": 50.00, "description": "Азия, технологический гигант", "flagImage": "https://flagcdn.com/kr.svg"},
     {"code": "TR", "name": "Turkey", "visaCost": 60.00, "description": "Евразия, связь Востока и Запада", "flagImage": "https://flagcdn.com/tr.svg"},
-    {"code": "EG", "name": "Egypt", "visaCost": 25.00, "description": "Африка, древние пирамиды", "flagImage": "https://flagcdn.com/eg.svg"}
+    {"code": "EG", "name": "Egypt", "visaCost": 25.00, "description": "Африка, древние пирамиды", "flagImage": "https://flagcdn.com/eg.svg"},
+    {"code": "GR", "name": "Greece", "visaCost": 90.00, "description": "Европа, колыбель западной цивилизации", "flagImage": "https://flagcdn.com/gr.svg"},
+    {"code": "PT", "name": "Portugal", "visaCost": 75.00, "description": "Европа, родина мореплавателей", "flagImage": "https://flagcdn.com/pt.svg"},
+    {"code": "NL", "name": "Netherlands", "visaCost": 85.00, "description": "Европа, страна тюльпанов", "flagImage": "https://flagcdn.com/nl.svg"},
+    {"code": "SE", "name": "Sweden", "visaCost": 95.00, "description": "Скандинавия, северное сияние", "flagImage": "https://flagcdn.com/se.svg"},
+    {"code": "NO", "name": "Norway", "visaCost": 100.00, "description": "Скандинавия, фьорды", "flagImage": "https://flagcdn.com/no.svg"},
+    {"code": "FI", "name": "Finland", "visaCost": 90.00, "description": "Скандинавия, страна тысячи озер", "flagImage": "https://flagcdn.com/fi.svg"},
+    {"code": "PL", "name": "Poland", "visaCost": 65.00, "description": "Восточная Европа, богатая история", "flagImage": "https://flagcdn.com/pl.svg"},
+    {"code": "CZ", "name": "Czech Republic", "visaCost": 70.00, "description": "Центральная Европа, Прага", "flagImage": "https://flagcdn.com/cz.svg"}
   ],
   "routes": [
     {"code": "NYC-TOUR", "name": "Нью-Йорк: Мегаполис мечты", "description": "7 дней в самом известном городе США", "durationDays": 7, "price": 1500.00, "imageUrl": "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9", "isActive": true, "countryCode": "US"},
@@ -35,7 +90,15 @@
     {"code": "CANCUN-TOUR", "name": "Канкун: Пляжный отдых", "description": "7 дней на Карибах", "durationDays": 7, "price": 1100.00, "imageUrl": "https://images.unsplash.com/photo-1519925610903-381054cc2a1c", "isActive": true, "countryCode": "MX"},
     {"code": "SEOUL-TOUR", "name": "Сеул: K-pop и технологии", "description": "5 дней корейской волны", "durationDays": 5, "price": 1000.00, "imageUrl": "https://images.unsplash.com/photo-1534274867514-d5b47ef89edb", "isActive": true, "countryCode": "KR"},
     {"code": "ISTANBUL-TOUR", "name": "Стамбул: Мост континентов", "description": "5 дней восточной культуры", "durationDays": 5, "price": 850.00, "imageUrl": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200", "isActive": true, "countryCode": "TR"},
-    {"code": "CAIRO-TOUR", "name": "Каир: Пирамиды Гизы", "description": "4 дня древней истории", "durationDays": 4, "price": 600.00, "imageUrl": "https://images.unsplash.com/photo-1569982175971-d92b01cf8694", "isActive": true, "countryCode": "EG"}
+    {"code": "CAIRO-TOUR", "name": "Каир: Пирамиды Гизы", "description": "4 дня древней истории", "durationDays": 4, "price": 600.00, "imageUrl": "https://images.unsplash.com/photo-1569982175971-d92b01cf8694", "isActive": true, "countryCode": "EG"},
+    {"code": "ATHENS-TOUR", "name": "Афины: Колыбель демократии", "description": "5 дней греческой истории", "durationDays": 5, "price": 950.00, "imageUrl": "https://images.unsplash.com/photo-1555993539-1732b0258235", "isActive": true, "countryCode": "GR"},
+    {"code": "LISBON-TOUR", "name": "Лиссабон: Город на семи холмах", "description": "6 дней португальского гостеприимства", "durationDays": 6, "price": 900.00, "imageUrl": "https://images.unsplash.com/photo-1585204913870-f4559e89b7b6", "isActive": true, "countryCode": "PT"},
+    {"code": "AMSTERDAM-TOUR", "name": "Амстердам: Город каналов", "description": "5 дней голландской культуры", "durationDays": 5, "price": 1100.00, "imageUrl": "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4", "isActive": true, "countryCode": "NL"},
+    {"code": "STOCKHOLM-TOUR", "name": "Стокгольм: Венеция Севера", "description": "6 дней скандинавского дизайна", "durationDays": 6, "price": 1400.00, "imageUrl": "https://images.unsplash.com/photo-1551818250-b2e0c5c3e056", "isActive": true, "countryCode": "SE"},
+    {"code": "OSLO-TOUR", "name": "Осло: Столица фьордов", "description": "7 дней норвежской природы", "durationDays": 7, "price": 1600.00, "imageUrl": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4", "isActive": true, "countryCode": "NO"},
+    {"code": "HELSINKI-TOUR", "name": "Хельсинки: Белые ночи", "description": "5 дней финского спокойствия", "durationDays": 5, "price": 1200.00, "imageUrl": "https://images.unsplash.com/photo-1551434678-e076c223a692", "isActive": true, "countryCode": "FI"},
+    {"code": "WARSAW-TOUR", "name": "Варшава: Феникс Европы", "description": "4 дня польской истории", "durationDays": 4, "price": 750.00, "imageUrl": "https://images.unsplash.com/photo-1519817914152-22d216bb9170", "isActive": true, "countryCode": "PL"},
+    {"code": "PRAGUE-TOUR", "name": "Прага: Злата Прага", "description": "5 дней чешского пива и архитектуры", "durationDays": 5, "price": 850.00, "imageUrl": "https://images.unsplash.com/photo-1519677100203-6f4d3e4d01c5", "isActive": true, "countryCode": "CZ"}
   ],
   "sales": [
     {"purpose": "отдых", "price": 1500.00, "quantity": 2, "saleDate": "2024-01-15T10:30:00Z", "customerName": "Иван Иванов", "customerEmail": "ivan@example.com", "status": "completed", "routeCode": "NYC-TOUR"},
@@ -54,6 +117,14 @@
     {"purpose": "шоп-тур", "price": 1100.00, "quantity": 1, "saleDate": "2024-02-22T13:15:00Z", "customerName": "Юлия Петрова", "customerEmail": "yulia@example.com", "status": "cancelled", "routeCode": "CANCUN-TOUR"},
     {"purpose": "деловая", "price": 1000.00, "quantity": 2, "saleDate": "2024-03-01T11:30:00Z", "customerName": "Артем Семенов", "customerEmail": "artem@example.com", "status": "confirmed", "routeCode": "SEOUL-TOUR"},
     {"purpose": "экскурсия", "price": 850.00, "quantity": 3, "saleDate": "2024-01-29T10:00:00Z", "customerName": "Ксения Федорова", "customerEmail": "ksenia@example.com", "status": "completed", "routeCode": "ISTANBUL-TOUR"},
-    {"purpose": "отдых", "price": 600.00, "quantity": 2, "saleDate": "2024-02-25T15:50:00Z", "customerName": "Максим Орлов", "customerEmail": "maxim@example.com", "status": "confirmed", "routeCode": "CAIRO-TOUR"}
+    {"purpose": "отдых", "price": 600.00, "quantity": 2, "saleDate": "2024-02-25T15:50:00Z", "customerName": "Максим Орлов", "customerEmail": "maxim@example.com", "status": "confirmed", "routeCode": "CAIRO-TOUR"},
+    {"purpose": "экскурсия", "price": 950.00, "quantity": 1, "saleDate": "2024-01-10T09:20:00Z", "customerName": "Олег Николаев", "customerEmail": "oleg@example.com", "status": "completed", "routeCode": "ATHENS-TOUR"},
+    {"purpose": "отдых", "price": 900.00, "quantity": 2, "saleDate": "2024-02-05T14:30:00Z", "customerName": "Светлана Ковалева", "customerEmail": "svetlana@example.com", "status": "confirmed", "routeCode": "LISBON-TOUR"},
+    {"purpose": "деловая", "price": 1100.00, "quantity": 1, "saleDate": "2024-03-15T11:45:00Z", "customerName": "Роман Белов", "customerEmail": "roman@example.com", "status": "completed", "routeCode": "AMSTERDAM-TOUR"},
+    {"purpose": "шоп-тур", "price": 1400.00, "quantity": 1, "saleDate": "2024-01-28T16:10:00Z", "customerName": "Алина Григорьева", "customerEmail": "alina@example.com", "status": "confirmed", "routeCode": "STOCKHOLM-TOUR"},
+    {"purpose": "экскурсия", "price": 1600.00, "quantity": 2, "saleDate": "2024-02-12T10:00:00Z", "customerName": "Денис Степанов", "customerEmail": "denis@example.com", "status": "completed", "routeCode": "OSLO-TOUR"},
+    {"purpose": "отдых", "price": 1200.00, "quantity": 3, "saleDate": "2024-03-20T13:25:00Z", "customerName": "Екатерина Фролова", "customerEmail": "ekaterina@example.com", "status": "pending", "routeCode": "HELSINKI-TOUR"},
+    {"purpose": "деловая", "price": 750.00, "quantity": 1, "saleDate": "2024-01-05T15:40:00Z", "customerName": "Владимир Медведев", "customerEmail": "vladimir@example.com", "status": "confirmed", "routeCode": "WARSAW-TOUR"},
+    {"purpose": "экскурсия", "price": 850.00, "quantity": 2, "saleDate": "2024-02-28T12:15:00Z", "customerName": "Галина Павлова", "customerEmail": "galina@example.com", "status": "completed", "routeCode": "PRAGUE-TOUR"}
   ]
 }
