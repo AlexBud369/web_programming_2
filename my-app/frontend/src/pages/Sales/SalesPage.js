@@ -32,11 +32,16 @@ const SalesPage = () => {
 
   const columns = [
     { id: 'purpose', label: 'Цель' },
-    { id: 'price', label: 'Цена ($)' },
+    { id: 'price', label: 'Цена ($)', render: (row) => `${row.price} $` },
     { id: 'quantity', label: 'Кол-во' },
     { id: 'customerName', label: 'Клиент' },
     { id: 'saleDate', label: 'Дата', render: (row) => new Date(row.saleDate).toLocaleDateString() },
     { id: 'status', label: 'Статус' },
+    { 
+      id: 'createdBy', 
+      label: 'Создатель', 
+      render: (row) => row.creator?.email ? row.creator.email : `ID: ${row.createdBy}` 
+    },
   ];
 
   const sortOptions = [
@@ -47,7 +52,11 @@ const SalesPage = () => {
 
   return (
     <>
-      <PageHeader title="Продажи" addPath="/sales/add" />
+      <PageHeader 
+        title="Продажи" 
+        addPath="/sales/new" 
+        entityType="sales" 
+      />
 
       <SearchSortBar
         search={search}
@@ -68,6 +77,7 @@ const SalesPage = () => {
         onDelete={handleDelete}
         basePath="/sales"
         loading={loading}
+        entityType="sales" 
       />
     </>
   );

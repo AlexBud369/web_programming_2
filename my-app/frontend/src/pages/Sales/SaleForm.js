@@ -6,41 +6,25 @@ import { addSale, editSale, fetchSale } from '../../store/slices/saleSlice';
 import { fetchRoutes } from '../../store/slices/routeSlice';
 import EntityForm from '../../components/EntityForm';
 import { toast } from 'react-toastify';
+import { Navigate } from 'react-router-dom';
 
 const SaleForm = () => {
   const { id } = useParams();
   const isEdit = !!id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { current, loading } = useSelector((state) => state.sales);
-  const { list: routes } = useSelector((state) => state.routes);
-  const [routeOptions, setRouteOptions] = useState([]);
-
-  useEffect(() => {
-    dispatch(fetchRoutes({ page: 1, limit: 100 }));
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (routes.length > 0) {
-      const options = routes.map(route => ({
-        value: route.id,
-        label: `${route.code} - ${route.name}`
-      }));
-      setRouteOptions(options);
-    }
-  }, [routes]);
-
+  
   const {
     register,
     handleSubmit,
     reset,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
       purpose: '',
-      price: '',
-      quantity: '',
+      price: '0',
+      quantity: '1',
       saleDate: new Date().toISOString().split('T')[0],
       customerName: '',
       customerEmail: '',
@@ -48,26 +32,68 @@ const SaleForm = () => {
       routeId: ''
     }
   });
+  
+  const { current, loading } = useSelector((state) => state.sales);
+  const { list: routes, loading: routesLoading } = useSelector((state) => state.routes);
+  const { user } = useSelector((state) => state.auth);
+  const [routeOptions, setRouteOptions] = useState([]);
+  const [hasAccess, setHasAccess] = useState(true);
 
   useEffect(() => {
-    if (isEdit && id) {
-      dispatch(fetchSale(id));
+    const loadRoutes = async () => {
+      try {
+        await dispatch(fetchRoutes({ page: 1, limit: 100 })).unwrap();
+      } catch (error) {
+        toast.error('Ошибка загрузки маршрутов');
+      }
+    };
+    loadRoutes();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (routes && routes.length > 0) {
+      const options = routes.map(route => ({
+        value: route.id,
+        label: `${route.code} - ${route.name} (${route.price}$)`
+      }));
+      setRouteOptions(options);
     }
-  }, [dispatch, id, isEdit]);
+  }, [routes]);
 
   useEffect(() => {
-    if (current && isEdit) {
+    const loadSale = async () => {
+      if (isEdit && id && !isNaN(parseInt(id))) {
+        try {
+          await dispatch(fetchSale(id)).unwrap();
+        } catch (error) {
+          toast.error('Ошибка загрузки данных продажи');
+          navigate('/sales');
+        }
+      }
+    };
+    loadSale();
+  }, [dispatch, id, isEdit, navigate]);
+
+  useEffect(() => {
+    if (isEdit && current) {
+      if (user && user.role !== 'admin' && current.createdBy !== user.id) {
+        toast.error('У вас нет прав для редактирования этой продажи');
+        setHasAccess(false);
+        return;
+      }
+
       const formatted = {
         ...current,
-        price: current.price ? current.price.toString() : '',
-        quantity: current.quantity ? current.quantity.toString() : '',
+        price: current.price ? current.price.toString() : '0',
+        quantity: current.quantity ? current.quantity.toString() : '1',
         routeId: current.routeId ? current.routeId.toString() : '',
-        saleDate: current.saleDate ? new Date(current.saleDate)
-        .toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+        saleDate: current.saleDate 
+          ? new Date(current.saleDate).toISOString().split('T')[0]
+          : new Date().toISOString().split('T')[0],
       };
       reset(formatted);
     }
-  }, [current, reset, isEdit]);
+  }, [current, isEdit, reset, user]);
 
   const onSubmit = async (data) => {
     try {
@@ -102,6 +128,10 @@ const SaleForm = () => {
       }
     }
   };
+
+  if (!hasAccess && isEdit) {
+    return <Navigate to="/sales" />;
+  }
 
   const purposeOptions = [
     { value: 'отдых', label: 'Отдых' },
@@ -204,6 +234,8 @@ const SaleForm = () => {
     },
   ];
 
+  const isLoading = routesLoading || (isEdit && loading) || isSubmitting;
+
   return (
     <EntityForm
       title={isEdit ? 'Редактировать продажу' : 'Добавить продажу'}
@@ -213,7 +245,7 @@ const SaleForm = () => {
       errors={errors}
       isEdit={isEdit}
       onCancel={() => navigate('/sales')}
-      loading={loading}
+      loading={isLoading}
       isSelectSupported={true}
       watch={watch}
     />
