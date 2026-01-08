@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import BarChartIcon from '@mui/icons-material/BarChart'; 
 
 const AppHeader = () => {
   const location = useLocation();
@@ -73,6 +74,16 @@ const AppHeader = () => {
                 sx={{ borderColor: 'white' }}
               >
                 Продажи
+              </Button>
+              <Button
+                color="inherit"
+                component={Link}
+                to="/analytics"
+                variant={isActive('/analytics') ? 'outlined' : 'text'}
+                sx={{ borderColor: 'white' }}
+                startIcon={<BarChartIcon />}
+              >
+                Аналитика
               </Button>
               
               <div>

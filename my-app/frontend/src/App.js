@@ -23,6 +23,7 @@ import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import ProfilePage from './pages/ProfilePage';
+import AnalyticsPage from './pages/Analytics/AnalyticsPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -124,6 +125,12 @@ function App() {
           <Route path="/sales/:id" element={
             <PrivateRoute>
               <SaleDetail />
+            </PrivateRoute>
+          } />
+
+          <Route path="/analytics" element={
+            <PrivateRoute>
+              <AnalyticsPage />
             </PrivateRoute>
           } />
           
