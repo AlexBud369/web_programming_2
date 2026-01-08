@@ -63,9 +63,23 @@ const validateChangePassword = [
   validate
 ];
 
+const validateResetPassword = [
+  body('token')
+    .trim()
+    .notEmpty().withMessage('Токен обязателен'),
+  
+  body('newPassword')
+    .trim()
+    .notEmpty().withMessage('Новый пароль обязателен')
+    .isLength({ min: 6 }).withMessage('Новый пароль должен быть не менее 6 символов'),
+  
+  validate
+];
+
 module.exports = {
   validateRegister,
   validateLogin,
   validatePasswordReset,
+  validateResetPassword, 
   validateChangePassword
 };

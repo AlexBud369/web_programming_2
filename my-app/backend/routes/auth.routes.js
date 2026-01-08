@@ -14,7 +14,7 @@ router.post('/login', validateLogin, authController.login);
 router.post('/refresh-token', authController.refreshToken);
 router.post('/logout', authenticate, authController.logout);
 router.post('/request-password-reset', validatePasswordReset, authController.requestPasswordReset);
-router.post('/reset-password', authController.resetPassword);
+router.post('/reset-password', validateResetPassword, authController.resetPassword);
 router.post('/change-password', authenticate, validateChangePassword, authController.changePassword);
 router.get('/profile', authenticate, authController.getProfile);
 
