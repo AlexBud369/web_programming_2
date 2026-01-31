@@ -3,6 +3,7 @@ import authReducer from './slices/authSlice';
 import countryReducer from './slices/countrySlice';
 import routeReducer from './slices/routeSlice';
 import saleReducer from './slices/saleSlice';
+import userReducer from './slices/userSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     countries: countryReducer,
     routes: routeReducer,
     sales: saleReducer,
+    users: userReducer
   }
 });
 

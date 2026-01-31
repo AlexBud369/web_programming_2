@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getSales, getSaleById, createSale, updateSale, deleteSale } from '../../services/saleService';
+import { getSales, getSaleById, createSale, updateSale, deleteSale, parseExtraServices } from '../../services/saleService';
 
 export const fetchSales = createAsyncThunk(
   'sales/fetchSales',
@@ -115,7 +115,18 @@ const saleSlice = createSlice({
       })
       .addCase(fetchSale.fulfilled, (state, action) => {
         state.loading = false;
-        state.current = action.payload.data || action.payload;
+        const saleData = action.payload.data || action.payload;
+        
+        if (saleData.extraServices && typeof saleData.extraServices === 'string') {
+          try {
+            saleData.extraServices = JSON.parse(saleData.extraServices);
+          } catch (error) {
+            console.error('Error parsing extraServices in slice:', error);
+            saleData.extraServices = [];
+          }
+        }
+        
+        state.current = saleData;
       })
       .addCase(fetchSale.rejected, (state, action) => {
         state.loading = false;
@@ -129,6 +140,16 @@ const saleSlice = createSlice({
       .addCase(editSale.fulfilled, (state, action) => {
         state.loading = false;
         const updatedSale = action.payload.data || action.payload;
+        
+        if (updatedSale.extraServices && typeof updatedSale.extraServices === 'string') {
+          try {
+            updatedSale.extraServices = JSON.parse(updatedSale.extraServices);
+          } catch (error) {
+            console.error('Error parsing extraServices in slice:', error);
+            updatedSale.extraServices = [];
+          }
+        }
+        
         const index = state.list.findIndex(s => s.id === updatedSale.id);
         if (index !== -1) {
           state.list[index] = updatedSale;

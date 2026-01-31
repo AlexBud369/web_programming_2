@@ -81,8 +81,9 @@ const routeSlice = createSlice({
       })
       .addCase(fetchRoutes.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload.data || action.payload;
-        state.total = action.payload.total || 0;
+        const responseData = action.payload.data || action.payload;
+        state.list = Array.isArray(responseData) ? responseData : [];
+        state.total = action.payload.total || state.list.length;
       })
       .addCase(fetchRoutes.rejected, (state, action) => {
         state.loading = false;
