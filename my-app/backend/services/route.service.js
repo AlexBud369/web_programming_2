@@ -28,7 +28,9 @@ class RouteService {
           ...data,
           durationDays: parseInt(data.durationDays),
           countryId: parseInt(data.countryId),
-          isActive: data.isActive === 'true' || data.isActive === true
+          isActive: data.isActive === 'true' || data.isActive === true,
+          startSeasonDate: data.startSeasonDate ? new Date(data.startSeasonDate) : null,
+          endSeasonDate: data.endSeasonDate ? new Date(data.endSeasonDate) : null
         };
 
         console.log('Processed route data:', processedData);
@@ -107,6 +109,12 @@ class RouteService {
       }
       if (data.isActive !== undefined) {
         processedData.isActive = data.isActive === 'true' || data.isActive === true;
+      }
+      if (data.startSeasonDate !== undefined) {
+        processedData.startSeasonDate = data.startSeasonDate ? new Date(data.startSeasonDate) : null;
+      }
+      if (data.endSeasonDate !== undefined) {
+        processedData.endSeasonDate = data.endSeasonDate ? new Date(data.endSeasonDate) : null;
       }
 
       const updated = await routeRepository.update(id, processedData);

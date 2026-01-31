@@ -1,11 +1,11 @@
 const saleRepository = require('../repositories/sale.repository');
-const { Route } = require('../models');
+const analyticsService = require('./analytics.service');
+const { Route, sequelize } = require('../models');
+const { Op, literal } = require('sequelize');
 
 class SaleService {
   async create(data, userId) {  
     try {
-      console.log('SaleService.create received:', data);
-      
       const route = await Route.findByPk(data.routeId);
       if (!route) {
         const error = new Error('Маршрут с указанным ID не найден');
@@ -15,7 +15,7 @@ class SaleService {
 
       const processedData = {
         ...data,
-        createdBy: userId, 
+        createdBy: userId,
         price: typeof data.price === 'string' 
           ? parseFloat(data.price.replace(',', '.')) 
           : data.price,
@@ -25,14 +25,14 @@ class SaleService {
         routeId: parseInt(data.routeId),
       };
 
-      console.log('Processed sale data:', processedData);
-      
+      if (data.extraServices) {
+        processedData.extraServices = typeof data.extraServices === 'string' 
+          ? data.extraServices 
+          : JSON.stringify(data.extraServices);
+      }
+
       return await saleRepository.create(processedData);
     } catch (err) {
-      console.log('Create sale error:', err);
-      console.log('Error name:', err.name);
-      console.log('Error details:', err.errors || err);
-      
       if (err.name === 'SequelizeValidationError') {
         const validationError = new Error('Ошибка валидации данных продажи');
         validationError.errors = err.errors.map(e => ({
@@ -116,6 +116,12 @@ class SaleService {
         processedData.routeId = parseInt(data.routeId);
       }
 
+      if (data.extraServices !== undefined) {
+        processedData.extraServices = typeof data.extraServices === 'string'
+          ? data.extraServices
+          : JSON.stringify(data.extraServices);
+      }
+
       const updated = await saleRepository.update(id, processedData);
       if (!updated) {
         const error = new Error('Продажа не найдена');
@@ -124,8 +130,6 @@ class SaleService {
       }
       return updated;
     } catch (err) {
-      console.log('Update sale error:', err.message);
-      
       if (err.name === 'SequelizeValidationError') {
         const validationError = new Error('Ошибка валидации данных продажи');
         validationError.errors = err.errors.map(e => ({
@@ -162,6 +166,28 @@ class SaleService {
       }
       throw error;
     }
+  }
+
+  async getForExport(filters = {}, user) {
+    const where = { ...filters };
+    
+    if (user && user.role !== 'admin') {
+      where.createdBy = user.id;
+    }
+
+    return await saleRepository.findAll({
+      where,
+      include: [{
+        model: Route,
+        as: 'route',
+        attributes: ['name']  
+      }],
+      order: [['saleDate', 'DESC']]
+    });
+  }
+
+  async getStats(filters = {}, user, options = {}) {
+    return await analyticsService.getSalesStats(filters, user, options);
   }
 }
 
