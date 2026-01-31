@@ -74,6 +74,15 @@ const AppHeader = () => {
               >
                 Продажи
               </Button>
+              <Button
+                color="inherit"
+                component={Link}
+                to="/analytics"
+                variant={isActive('/analytics') ? 'outlined' : 'text'}
+                sx={{ borderColor: 'white' }}
+              >
+                Аналитика
+              </Button>
               
               <div>
                 <IconButton
