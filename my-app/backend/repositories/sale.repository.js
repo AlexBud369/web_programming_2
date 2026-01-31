@@ -24,6 +24,15 @@ class SaleRepository extends AbstractRepository {
       offset
     });
   }
+
+  async findAll(options = {}) {
+    return await this.model.findAll(options);
+  }
+
+
+  async sum(field, options = {}) {
+    return await this.model.sum(field, options);
+  }
 }
 
 module.exports = new SaleRepository();
