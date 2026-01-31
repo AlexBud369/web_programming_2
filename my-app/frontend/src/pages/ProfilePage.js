@@ -24,8 +24,11 @@ import PersonIcon from '@mui/icons-material/Person';
 import SecurityIcon from '@mui/icons-material/Security';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import api from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const [changePassword, setChangePassword] = useState(false);
   const [passwordData, setPasswordData] = useState({
@@ -306,6 +309,42 @@ const ProfilePage = () => {
                   ? 'Вы можете создавать, редактировать и удалять страны, маршруты и видеть все продажи.' 
                   : 'Вы можете просматривать страны и маршруты, а также создавать и просматривать только свои продажи.'}
               </Typography>
+
+              {user.role === 'admin' && (
+                <>
+                  <Divider sx={{ my: 3 }} />
+                  
+                  <Card variant="outlined" sx={{ mt: 3 }}>
+                    <CardContent>
+                      <Typography variant="h6" gutterBottom>
+                        Административная панель
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                        Расширенные функции управления системой
+                      </Typography>
+                      <Button 
+                        variant="contained" 
+                        onClick={() => navigate('/users')}
+                        startIcon={<AdminPanelSettingsIcon />}
+                        fullWidth
+                      >
+                        Управление пользователями
+                      </Button>
+                      <Box sx={{ mt: 2 }}>
+                        <Typography variant="caption" color="text.secondary" component="div">
+                          • Расширенная таблица с сортировкой и фильтрацией
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary" component="div">
+                          • Drag-and-drop для изменения ролей
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary" component="div">
+                          • Выбор строк и массовые операции
+                        </Typography>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </>
+              )}
             </Paper>
           </Grid>
         </Grid>

@@ -5,6 +5,7 @@ import DataTable from '../../components/DataTable';
 import PageHeader from '../../components/PageHeader';
 import SearchSortBar from '../../components/SearchSortBar';
 import { toast } from 'react-toastify';
+import ExportButton from '../../components/ExportButton';
 
 const SalesPage = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,26 @@ const SalesPage = () => {
 
   const handlePageChange = (_, value) => setPage(value);
 
+  const formatExtraServices = (extraServices) => {
+    if (!extraServices) return '0';
+    
+    try {
+      const services = typeof extraServices === 'string' 
+        ? JSON.parse(extraServices) 
+        : extraServices;
+      
+      if (!Array.isArray(services) || services.length === 0) return '0';
+      
+      const totalCost = services.reduce((sum, service) => 
+        sum + (parseFloat(service.price) || 0), 0
+      );
+      
+      return `${services.length} ($${totalCost})`;
+    } catch (error) {
+      return '0';
+    }
+  };
+
   const columns = [
     { id: 'purpose', label: 'Цель' },
     { id: 'price', label: 'Цена ($)', render: (row) => `${row.price} $` },
@@ -38,9 +59,9 @@ const SalesPage = () => {
     { id: 'saleDate', label: 'Дата', render: (row) => new Date(row.saleDate).toLocaleDateString() },
     { id: 'status', label: 'Статус' },
     { 
-      id: 'createdBy', 
-      label: 'Создатель', 
-      render: (row) => row.creator?.email ? row.creator.email : `ID: ${row.createdBy}` 
+      id: 'extraServices', 
+      label: 'Доп. услуги', 
+      render: (row) => formatExtraServices(row.extraServices)
     },
   ];
 
@@ -79,6 +100,7 @@ const SalesPage = () => {
         loading={loading}
         entityType="sales" 
       />
+      <ExportButton />
     </>
   );
 };

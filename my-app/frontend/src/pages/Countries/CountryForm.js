@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 const CountryForm = () => {
   const { id } = useParams();
-  const isEdit = !!id;
+  const isEdit = id && id !== 'new' && id !== 'add';
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { current, loading } = useSelector((state) => state.countries);
@@ -30,11 +30,11 @@ const CountryForm = () => {
   });
 
   useEffect(() => {
-    if (isEdit && id) {
+    if (isEdit && id && id !== 'new' && id !== 'add') {
       dispatch(fetchCountry(id));
     }
   }, [dispatch, id, isEdit]);
-
+  
   useEffect(() => {
     if (current && isEdit) {
       const formData = {

@@ -47,7 +47,7 @@ const RoutesPage = () => {
 
   return (
     <>
-      <PageHeader title="Маршруты" addPath="/routes/add" />
+      <PageHeader title="Маршруты" addPath="/routes/new" />
 
       <SearchSortBar
         search={search}

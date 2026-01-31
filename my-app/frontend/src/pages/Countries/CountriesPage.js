@@ -44,7 +44,7 @@ const CountriesPage = () => {
 
   return (
     <>
-      <PageHeader title="Страны" addPath="/countries/add" />
+      <PageHeader title="Страны" addPath="/countries/new" />
 
       <SearchSortBar
         search={search}
