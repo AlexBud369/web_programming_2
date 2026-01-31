@@ -23,6 +23,8 @@ import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import ProfilePage from './pages/ProfilePage';
+import AnalyticsPage from './pages/Analytics/AnalyticsPage';
+import UserManagementPage from './pages/Users/UserManagementPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -60,19 +62,19 @@ function App() {
               <CountriesPage />
             </PrivateRoute>
           } />
-          
+
           <Route path="/countries/new" element={
             <RoleBasedRoute allowedRoles={['admin']}>
               <CountryForm />
             </RoleBasedRoute>
           } />
-          
+
           <Route path="/countries/edit/:id" element={
             <RoleBasedRoute allowedRoles={['admin']}>
               <CountryForm />
             </RoleBasedRoute>
           } />
-          
+
           <Route path="/countries/:id" element={
             <PrivateRoute>
               <CountryDetail />
@@ -84,19 +86,19 @@ function App() {
               <RoutesPage />
             </PrivateRoute>
           } />
-          
+
           <Route path="/routes/new" element={
             <RoleBasedRoute allowedRoles={['admin']}>
               <RouteForm />
             </RoleBasedRoute>
           } />
-          
+
           <Route path="/routes/edit/:id" element={
             <RoleBasedRoute allowedRoles={['admin']}>
               <RouteForm />
             </RoleBasedRoute>
           } />
-          
+
           <Route path="/routes/:id" element={
             <PrivateRoute>
               <RouteDetail />
@@ -125,6 +127,13 @@ function App() {
             <PrivateRoute>
               <SaleDetail />
             </PrivateRoute>
+          } />
+          <Route path="/analytics" element={<AnalyticsPage />} />
+          
+          <Route path="/users" element={
+            <RoleBasedRoute allowedRoles={['admin']}>
+              <UserManagementPage />
+            </RoleBasedRoute>
           } />
           
           <Route path="/unauthorized" element={<UnauthorizedPage />} />

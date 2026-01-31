@@ -7,6 +7,7 @@ const countryRoutes = require('./routes/country.routes');
 const routeRoutes = require('./routes/route.routes');
 const saleRoutes = require('./routes/sale.routes');
 const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
 
 require('dotenv').config();
 
@@ -30,6 +31,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/countries', countryRoutes);
 app.use('/api/routes', routeRoutes);
 app.use('/api/sales', saleRoutes);
+app.use('/api/users', userRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
