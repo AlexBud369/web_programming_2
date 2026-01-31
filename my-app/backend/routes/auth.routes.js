@@ -6,7 +6,8 @@ const {
   validateRegister, 
   validateLogin, 
   validatePasswordReset,
-  validateChangePassword 
+  validateChangePassword,
+  validateResetPassword 
 } = require('../middlewares/auth.validators');
 
 router.post('/register', validateRegister, authController.register);

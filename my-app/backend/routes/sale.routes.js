@@ -4,6 +4,9 @@ const saleController = require('../controllers/sale.controller');
 const { validateIdParam, validateSale } = require('../middlewares/validation');
 const { authenticate } = require('../middlewares/auth.middleware'); 
 
+router.get('/export', authenticate, saleController.getForExport);
+router.get('/stats', authenticate, saleController.getStats);
+
 router.post('/', authenticate, validateSale, saleController.create);
 router.get('/', authenticate, saleController.getAll);
 router.get('/:id', authenticate, validateIdParam, saleController.getById);
