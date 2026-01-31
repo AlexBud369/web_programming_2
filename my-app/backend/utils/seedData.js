@@ -65,16 +65,18 @@ async function seedDatabase() {
             continue;
           }
           
-          const route = await Route.create({
-            code: routeData.code,
-            name: routeData.name,
-            description: routeData.description,
-            durationDays: routeData.durationDays,
-            price: routeData.price,
-            imageUrl: routeData.imageUrl,
-            isActive: routeData.isActive,
-            countryId: countryId
-          });
+         const route = await Route.create({
+          code: routeData.code,
+          name: routeData.name,
+          description: routeData.description,
+          durationDays: routeData.durationDays,
+          price: routeData.price,
+          imageUrl: routeData.imageUrl,
+          isActive: routeData.isActive,
+          countryId: countryId,
+          startSeasonDate: routeData.startSeasonDate || null,
+          endSeasonDate: routeData.endSeasonDate || null
+        });
           
           routeCodeToId[route.code] = route.id;
         } catch (error) {
@@ -119,7 +121,8 @@ async function seedDatabase() {
               customerEmail: saleData.customerEmail,
               status: saleData.status,
               routeId: routeId,
-              createdBy: createdByUserId
+              createdBy: createdByUserId,
+              extraServices: saleData.extraServices ? JSON.stringify(saleData.extraServices) : null
             });
             
             saleCount++;
