@@ -29,7 +29,9 @@ export const createRoute = async (data) => {
       price: data.price ? parseFloat(data.price.toString().replace(',', '.')) : 0,
       durationDays: data.durationDays ? parseInt(data.durationDays.toString()) : 1,
       countryId: parseInt(data.countryId),
-      isActive: data.isActive === 'true' || data.isActive === true
+      isActive: data.isActive === 'true' || data.isActive === true,
+      startSeasonDate: data.startSeasonDate || null,
+      endSeasonDate: data.endSeasonDate || null
     };
     
     console.log('Formatted route data:', formattedData);
@@ -69,6 +71,12 @@ export const updateRoute = async (id, data) => {
     if (data.isActive !== undefined) {
       formattedData.isActive = data.isActive === 'true' || data.isActive === true;
     }
+    if (data.startSeasonDate !== undefined) {
+      formattedData.startSeasonDate = data.startSeasonDate || null;
+    }
+    if (data.endSeasonDate !== undefined) {
+      formattedData.endSeasonDate = data.endSeasonDate || null;
+    }
     
     const response = await api.put(`/routes/${id}`, formattedData);
     return response.data;
@@ -99,10 +107,12 @@ export const deleteRoute = async (id) => {
 
 export const checkRouteExists = async (id) => {
   try {
-    const response = await api.head(`/routes/${id}`);
-    return response.status === 200;
+    const routeId = typeof id === 'string' ? parseInt(id) : id;
+    const response = await api.get(`/routes/${routeId}`);
+
+    return response.status === 200 && response.data;
   } catch (error) {
-    console.error(`Error checking route ${id}:`, error.response?.data || error.message);
+    console.error(`Error checking route ${id}:`, error.response?.status, error.message);
     return false;
   }
 };
@@ -114,5 +124,56 @@ export const checkRouteCodeExists = async (code) => {
   } catch (error) {
     console.error('Error checking route code:', error);
     return false;
+  }
+};
+
+export const checkRouteAvailability = async (routeId, startDate, endDate) => {
+  try {
+   
+    const route = await getRouteById(routeId);
+    
+    if (!route || !route.data) {
+      return { 
+        available: false, 
+        message: 'Маршрут не найден' 
+      };
+    }
+    
+    const routeData = route.data || route;
+    
+    if (!routeData.isActive) {
+      return { 
+        available: false, 
+        message: 'Маршрут не активен в данный момент' 
+      };
+    }
+    
+    const saleDate = startDate ? new Date(startDate) : new Date();
+    
+    if (routeData.startSeasonDate && routeData.endSeasonDate) {
+      const startSeason = new Date(routeData.startSeasonDate);
+      const endSeason = new Date(routeData.endSeasonDate);
+      
+      if (saleDate < startSeason || saleDate > endSeason) {
+        return { 
+          available: false, 
+          message: 'Маршрут недоступен вне сезона. Сезон: ' + 
+                   startSeason.toLocaleDateString() + ' - ' + 
+                   endSeason.toLocaleDateString() 
+        };
+      }
+    }
+    
+    return { 
+      available: true,
+      message: 'Маршрут доступен для бронирования'
+    };
+  } catch (error) {
+    console.error('Error checking route availability:', error);
+    
+    return { 
+      available: true, 
+      message: 'Не удалось проверить доступность. Пожалуйста, проверьте вручную.' 
+    };
   }
 };
