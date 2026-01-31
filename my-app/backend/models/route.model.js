@@ -66,6 +66,20 @@ module.exports = (sequelize) => {
           msg: 'ID страны должно быть положительным числом'
         }
       }
+    },
+    startSeasonDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
+      validate: {
+        isDate: { msg: 'Недопустимая дата начала сезона' }
+      }
+    },
+    endSeasonDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
+      validate: {
+        isDate: { msg: 'Недопустимая дата конца сезона' }
+      }
     }
   }, {
     tableName: 'routes',

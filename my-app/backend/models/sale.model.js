@@ -90,6 +90,11 @@ module.exports = (sequelize) => {
         key: 'id'
       },
       onDelete: 'SET NULL'
+    },
+     extraServices: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      defaultValue: null
     }
   }, {
     tableName: 'sales',
